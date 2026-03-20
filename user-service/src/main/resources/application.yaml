@@ -1,0 +1,23 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: user-service
+
+  config:
+    import: optional:file:.env[.properties]
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    database: postgresql
+#
+#  mongodb:
+#    url: ${MONGODB_URI}
+#    database: ${MONGODB_DATABASE}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL}

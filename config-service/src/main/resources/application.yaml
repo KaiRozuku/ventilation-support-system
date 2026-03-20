@@ -1,0 +1,16 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-service
+  config:
+    import: optional:file:.env[.properties]
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${GIT_URL}
+          username: ${GIT_USER}
+          password: ${GIT_TOKEN}
+          default-label: main
