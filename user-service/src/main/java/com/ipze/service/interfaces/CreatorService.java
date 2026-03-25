@@ -1,14 +1,14 @@
 //package com.ipze.service.interfaces;
-//
-//import com.ipze.domain.postgres.Role;
-//import com.ipze.domain.postgres.User;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.Pageable;
-//
-//import java.util.UUID;
-//
+////
+////import com.ipze.domain.postgres.Role;
+////import com.ipze.domain.postgres.User;
+////import org.springframework.data.domain.Page;
+////import org.springframework.data.domain.Pageable;
+////
+////import java.util.UUID;
+////
 ///**
-// * Основні методи для Creator
+// * Основні методи для class Creator
 // * @author vasylnosal
 // */
 //public interface CreatorService {

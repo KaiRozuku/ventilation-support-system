@@ -6,8 +6,8 @@
 //import com.ipze.domain.mongo.TransformerStatus;
 //import com.ipze.exception.TransformerNotFoundException;
 //import com.ipze.repository.mongo.TransformerRepository;
-//import com.ipze.service.interfaces.AlertService;
-//import com.ipze.service.interfaces.TransformerService;
+//import com.ipze.service.AlertService;
+//import com.ipze.service.TransformerService;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.stereotype.Service;

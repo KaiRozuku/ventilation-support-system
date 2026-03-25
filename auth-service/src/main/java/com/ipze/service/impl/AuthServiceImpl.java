@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -59,10 +58,5 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return userMapper.toDto(user);
-    }
-
-    @Override
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findUserByEmail(username);
     }
 }

@@ -1,6 +1,10 @@
 server:
   port: 8084
 
+security:
+  excluded-urls:
+    - /auth/**
+
 spring:
   application:
     name: user-service

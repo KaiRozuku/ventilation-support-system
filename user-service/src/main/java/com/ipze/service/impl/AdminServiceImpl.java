@@ -5,9 +5,9 @@
 //import com.ipze.dto1.request.TransformerRequest;
 //import com.ipze.exception.TransformerNotFoundException;
 //import com.ipze.service.interfaces.AdminService;
-//import com.ipze.service.interfaces.AlertService;
+//import com.ipze.service.AlertService;
 //import com.ipze.service.interfaces.OperatorService;
-//import com.ipze.service.interfaces.TransformerService;
+//import com.ipze.service.TransformerService;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Service;
 //import java.util.List;

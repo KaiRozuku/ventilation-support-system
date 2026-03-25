@@ -1,4 +1,4 @@
-package com.ipze.service.interfaces;
+package com.ipze.service;
 
 
 import com.ipze.dto.request.TransformerRequest;

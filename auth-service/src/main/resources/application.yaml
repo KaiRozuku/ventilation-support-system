@@ -22,7 +22,8 @@ spring:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-
+  access-token-ttl: 900000  # 15 хв = 15*60*1000
+  refresh-token-ttl: 604800000  # 7 днів = 7*24*60*60*1000
 eureka:
   client:
     service-url:

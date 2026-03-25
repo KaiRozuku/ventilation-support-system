@@ -4,7 +4,7 @@
 //import com.ipze.domain.mongo.Alert;
 //import com.ipze.domain.mongo.AlertLevel;
 //import com.ipze.repository.mongo.AlertRepository;
-//import com.ipze.service.interfaces.AlertService;
+//import com.ipze.service.AlertService;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Service;
 //

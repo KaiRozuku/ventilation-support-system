@@ -63,34 +63,3 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 }
-
-//import jakarta.persistence.*;
-//import lombok.*;
-//import org.hibernate.annotations.UuidGenerator;
-//
-//import java.util.UUID;
-//
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Builder
-//@Entity
-//@Table(name = "users")
-//public class User {
-//    @Id
-//    @UuidGenerator
-//    private UUID userID;
-//
-//    @Column(nullable = false)
-//    private String nameUKR;
-//
-//    @Column(nullable = false, unique = true)
-//    private String email;
-//
-//    @Column(nullable = false)
-//    private String password;
-//
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false)
-//    private Role role;
-//}

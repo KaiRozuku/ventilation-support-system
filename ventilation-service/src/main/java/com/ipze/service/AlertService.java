@@ -1,4 +1,4 @@
-package com.ipze.service.interfaces;
+package com.ipze.service;
 
 import com.ipze.domain.mongo.Alert;
 import com.ipze.domain.mongo.AlertLevel;

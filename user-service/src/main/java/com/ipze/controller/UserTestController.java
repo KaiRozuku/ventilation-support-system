@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/user")
-public class UserController {
+public class UserTestController {
 
     @GetMapping("/info")
     public String userInfo() {

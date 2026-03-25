@@ -1,15 +1,14 @@
 package com.ipze.service.interfaces;
 
 import com.ipze.dto.request.ChangeEmailRequest;
-import com.ipze.dto.request.ChangeNameRequest;
 import com.ipze.dto.request.ChangePasswordRequest;
+import com.ipze.dto.request.UpdateUserRequest;
 
 public interface UserAccountService {
 
-    void changePassword(ChangePasswordRequest request);
+    void changePassword(ChangePasswordRequest request, String token);
 
-    void changeName(ChangeNameRequest request);
+    void updateUser(UpdateUserRequest request, String token);
 
-    void changeEmail(ChangeEmailRequest request);
-
+    void changeEmail(ChangeEmailRequest request, String token);
 }

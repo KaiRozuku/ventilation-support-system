@@ -1,14 +1,17 @@
-package com.ipze.ventilation_support_system.config;
+package com.ipze.config;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Setter
+@Getter
 @ConfigurationProperties(prefix = "security")
-@Data
 public class SecurityProperties {
+
     private List<String> excludedUrls;
 }
