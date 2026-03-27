@@ -1,40 +1,97 @@
-//package com.ipze.service.impl;
-//import com.ipze.domain.postgres.Role1;
-//import com.ipze.domain.postgres.User1;
-//import com.ipze.exception.UserNotFoundException;
-//import com.ipze.repository.repository.UserRepository2;
-//import jakarta.transaction.Transactional;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.Pageable;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.UUID;
-//
-//@Service
-//@RequiredArgsConstructor
-//public class CreatorServiceImpl{
-//
-//    private final UserRepository2 userRepository2;
-//
-//
-//    public Page<User1> getUsersByRole(Role1 role, Pageable pageable) {
-//        return userRepository2.findAllByRole(role, pageable);
-//    }
-//
-//    public User1 getUserByEmail(String email) {
-//        return userRepository2.findUserByEmail(email)
-//                .orElseThrow(UserNotFoundException::new);
-//    }
-//
-//    public void changeRoleOfUser(UUID uuid, Role1 role) {
-//
-//    }
-//
-//    @Transactional
-//    public void changeRoleOfUser(UUID uuid, Role1 role) {
-//        User1 user = userRepository2.findById(uuid)
-//                .orElseThrow(UserNotFoundException::new);
-//        user.setRole(role);
-//    }
-//}
+package com.ipze.service.impl;
+
+import com.ipze.dto.Role;
+import com.ipze.dto.UserDto;
+import com.ipze.service.interfaces.CreatorService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class CreatorServiceImpl implements CreatorService {
+
+    private final WebClient webClient;
+
+    @Override
+    public Page<UserDto> getAllUsers(Pageable pageable, HttpServletRequest request) {
+        return sendGetRequest(
+                new ParameterizedTypeReference<Page<UserDto>>() {},
+                "/auth-service/api/creator/users?page=" + pageable.getPageNumber()
+                        + "&size=" + pageable.getPageSize(),
+                request
+        ).block();
+    }
+
+    @Override
+    public Page<UserDto> getUsersByRole(Role role, Pageable pageable, HttpServletRequest request) {
+        return sendGetRequest(
+                new ParameterizedTypeReference<Page<UserDto>>() {},
+                "/auth-service/api/creator/users?page=" + pageable.getPageNumber()
+                        + "&size=" + pageable.getPageSize()
+                        + "&role=" + role.name(),
+                request
+        ).block();
+    }
+
+    @Override
+    public UserDto getUserByEmail(String email, HttpServletRequest request) {
+        return sendGetRequest(
+                new ParameterizedTypeReference<UserDto>() {},
+                "/auth-service/api/creator/users?email=" + email,
+                request
+        ).block();
+    }
+
+    @Override
+    public void changeRoleOfUser(UUID id, Role role, HttpServletRequest request) {
+        sendPutRequest(
+                "/auth-service/api/creator/users/" + id + "?role=" + role.name(),
+                request
+        ).block();
+    }
+
+    private <T> Mono<T> sendGetRequest(
+            @NonNull ParameterizedTypeReference<T> type,
+            @NonNull String uri,
+            @NonNull HttpServletRequest request
+    ) {
+        return webClient.get()
+                .uri(uri)
+                .headers(headers -> copyHeaders(request, headers))
+                .retrieve()
+                .bodyToMono(type);
+    }
+
+    private Mono<Void> sendPutRequest(
+            @NonNull String uri,
+            @NonNull HttpServletRequest request
+    ) {
+        return webClient.put()
+                .uri(uri)
+                .headers(headers -> copyHeaders(request, headers))
+                .retrieve()
+                .bodyToMono(Void.class);
+    }
+
+    private void copyHeaders(HttpServletRequest request, HttpHeaders headers) {
+        String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String userId = request.getHeader("X-User-ID");
+        String username = request.getHeader("X-User-Name");
+        String roles = request.getHeader("X-User-Roles");
+
+        if (auth != null) headers.set(HttpHeaders.AUTHORIZATION, auth);
+        if (userId != null) headers.set("X-User-ID", userId);
+        if (username != null) headers.set("X-User-Name", username);
+        if (roles != null) headers.set("X-User-Roles", roles);
+    }
+}

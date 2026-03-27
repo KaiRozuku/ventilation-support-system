@@ -12,4 +12,5 @@ jwt:
 
 security:
   excluded-urls:
-    - /auth/**
+  - /auth/login/**
+  - /auth/register/**

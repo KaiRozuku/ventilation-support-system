@@ -1,6 +1,9 @@
 package com.ipze.repository;
 
+import com.ipze.model.postgres.Role;
 import com.ipze.model.postgres.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 //
 //    Optional<User> findByEmailOrUsername(String email, String username);
 //
-//    Page<User> findAllByRole(Role role, Pageable pageable);
+    Page<User> findAllByRole(Role role, Pageable pageable);
 //
 //    Page<User> findAllByActive(Boolean active, Pageable pageable);
 //

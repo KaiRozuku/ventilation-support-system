@@ -10,7 +10,7 @@ public class RouteConfiguration {
 
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder,
-                               GatewayFilter authFilter) {
+                               GatewayServiceFilter authFilter) {
 
         return builder.routes()
 
@@ -18,7 +18,8 @@ public class RouteConfiguration {
                         .path("/auth-service/**")
                         .filters(f -> f.rewritePath(
                                 "/auth-service/(?<segment>.*)",
-                                "/auth/${segment}"))
+                                "/auth/${segment}")
+                                .filter(authFilter))
                         .uri("http://localhost:8080"))
 //                        .uri("lb://auth-service"))
 

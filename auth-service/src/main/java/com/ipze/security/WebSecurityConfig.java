@@ -14,12 +14,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
 
 public class WebSecurityConfig{
 
     private final AuthFilter authFilter;
+
+    public WebSecurityConfig(AuthFilter authFilter) {
+        this.authFilter = authFilter;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
