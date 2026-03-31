@@ -5,6 +5,11 @@ spring:
   config:
     import: "optional:file:.env"  # .env читається без [.properties]
 
+  data:
+    redis:
+      host: {REDIS_HOST}
+      port: {REDIS_PORT}
+
   application:
     name: auth-service
 
@@ -20,9 +25,10 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-  access-token-ttl: 900000  # 15 хв = 15*60*1000
+  access-token-ttl: 60000  # 15 хв = 15*60*1000=90000
   refresh-token-ttl: 604800000  # 7 днів = 7*24*60*60*1000
 eureka:
   client:

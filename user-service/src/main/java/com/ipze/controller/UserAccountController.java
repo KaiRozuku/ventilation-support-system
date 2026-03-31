@@ -41,4 +41,16 @@ public class UserAccountController {
         userAccountService.changeEmail(request, httpRequest);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest httpServletRequest){
+        userAccountService.logout(httpServletRequest);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/refreshToken")
+    public ResponseEntity<?> refreshToken(HttpServletRequest httpServletRequest){
+        userAccountService.refreshToken(httpServletRequest);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -33,9 +33,7 @@ public class AuthCreatorController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<String> changeUserRole(
-            @PathVariable("id") UUID id,
-            @RequestParam("role") Role role) {
+    public ResponseEntity<String> changeUserRole(@PathVariable("id") UUID id, @RequestParam("role") Role role) {
         creatorService.changeRoleOfUser(id, role);
         return ResponseEntity.ok("Role updated successfully");
     }

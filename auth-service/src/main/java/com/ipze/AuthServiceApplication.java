@@ -16,6 +16,8 @@ public class AuthServiceApplication {
         System.setProperty("DATABASE_PASSWORD", dotenv.get("DATABASE_PASSWORD"));
         System.setProperty("JWT_SECRET_KEY", dotenv.get("JWT_SECRET_KEY"));
         System.setProperty("EUREKA_URL", dotenv.get("EUREKA_URL"));
+        System.setProperty("REDIS_HOST", dotenv.get("REDIS_HOST"));
+        System.setProperty("REDIS_PORT", dotenv.get("REDIS_PORT"));
 
         SpringApplication.run(AuthServiceApplication.class, args);
     }

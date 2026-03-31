@@ -7,10 +7,9 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
-jwt:
-  secret-key: ${JWT_SECRET_KEY}
-
 security:
   excluded-urls:
   - /auth/login/**
   - /auth/register/**
+  - /auth/refreshToken/**
+  secret-key: ${JWT_SECRET_KEY}

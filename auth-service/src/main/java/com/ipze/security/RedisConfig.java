@@ -1,4 +1,5 @@
-package com.ipze.repository.redis;
+package com.ipze.security;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +12,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    public <T> RedisTemplate<String, T> redisTemplate(RedisConnectionFactory factory) {
+        
+        RedisTemplate<String, T> template = new RedisTemplate<>();
 
         template.setConnectionFactory(factory);
 

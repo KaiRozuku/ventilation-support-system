@@ -10,7 +10,4 @@ public interface AuthService {
     void register(RegisterRequest request, Role role);
 
     UserDto login(LoginRequest request);
-
-    interface AuthCreatorService {
-    }
 }
