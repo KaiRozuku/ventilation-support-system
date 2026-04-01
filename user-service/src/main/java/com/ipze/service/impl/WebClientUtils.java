@@ -40,20 +40,6 @@ class WebClientUtils{
                 .bodyToMono(Void.class);
     }
 
-    @Deprecated //remove
-     <T> Mono<T> sendPostRequest(
-            @NonNull ParameterizedTypeReference<T> type,
-            @NonNull String uri,
-            @NonNull HttpServletRequest httpServletRequest
-    ){
-        return webClient.post()
-                .uri(uri)
-                .headers(headers -> copyHeaders(httpServletRequest, headers))
-                .retrieve()
-                .bodyToMono(type);
-    }
-
-    @Deprecated //remove
     <T, R> Mono<R> sendPostRequest(
             @NonNull String uri,
             @NonNull T body,

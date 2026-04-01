@@ -1,13 +1,13 @@
 package com.ipze.service;
 
-import com.ipze.domain.mongo.Alert;
-import com.ipze.domain.mongo.AlertLevel;
+import com.ipze.mongo.Alert;
+import com.ipze.mongo.AlertLevel;
 
 import java.util.List;
 
 public interface AlertService {
 
-    void createAndSaveAlert(Long transformerId, String message, AlertLevel level, Double temp, Double volt);
+    void createAlert();
 
     void createOperatorNote(Long id);
 
@@ -15,3 +15,4 @@ public interface AlertService {
 
     List<Alert> getAlertsByTransformerId(Long transformerId);
 }
+

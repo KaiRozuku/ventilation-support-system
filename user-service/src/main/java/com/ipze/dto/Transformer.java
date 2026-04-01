@@ -1,4 +1,4 @@
-package com.ipze.domain.mongo;
+package com.ipze.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,6 +41,6 @@ public class Transformer {
 
     private TransformerStatus status;
 
-    private List<Map<String, Object>> dataLogs = new ArrayList<>();
+    private List<Map<String, Object>> dataLogs = new ArrayList<>(); //?
 
 }

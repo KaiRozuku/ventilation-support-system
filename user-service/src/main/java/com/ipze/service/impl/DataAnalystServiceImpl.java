@@ -1,68 +1,68 @@
-//package com.ipze.service.impl;
-//
-//import com.ipze.domain.mongo.Alert;
-//import com.ipze.domain.mongo.Transformer;
-//import com.ipze.domain.mongo.AlertLevel;
-//import com.ipze.exception.TransformerNotFoundException;
-//import com.ipze.service.AlertService;
-//import com.ipze.service.interfaces.DataAnalystService;
-//import com.ipze.service.interfaces.OperatorService;
-//import com.ipze.service.TransformerService;
-//
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Service
-//@RequiredArgsConstructor
-//public class DataAnalystServiceImpl implements DataAnalystService {
-//
-//    private final TransformerService transformerService;
-//    private final OperatorService operatorService;
-//    private final AlertService alertService;
-//
-//    @Override
-//    public Optional<Transformer> exportTransformer(Long id) {
-//        return Optional.of(operatorService.getTransformer(id)
-//                .orElseThrow(TransformerNotFoundException::new));
-//    }
-//
-//    @Override
-//    public List<Transformer> exportTransformersRange(Long fromId, Long toId) {
-//        return transformerService.getAll().stream()
-//                .filter(t -> t.getId() >= fromId && t.getId() <= toId)
-//                .toList();
-//    }
-//
-//    @Override
-//    public List<Transformer> exportAllTransformers() {
-//        return transformerService.getAll()
-//                .stream()
-//                .toList();
-//    }
-//
-//    @Override
-//    public List<Alert> getAllErrors() {
-//        return alertService.findAll().stream()
-//                .toList();
-//    }
-//
-//    @Override
-//    public List<Alert> getCriticalAlerts() {
-//        return alertService.findAll().stream()
-//                .filter(a -> a.getLevel() == AlertLevel.CRITICAL)
-//                .toList();
-//    }
-//
-//    @Override
-//    public List<String> exportTransformerLogs(Long id) {
-//        return transformerService.getById(id)
-//                .orElseThrow(TransformerNotFoundException::new)
-//                .getDataLogs()
-//                .stream()
-//                .map(Object::toString)
-//                .toList();
-//    }
-//}
+package com.ipze.service.impl;
+
+import com.ipze.dto.Alert;
+import com.ipze.dto.Transformer;
+import com.ipze.service.interfaces.DataAnalystService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class DataAnalystServiceImpl implements DataAnalystService {
+
+    private final WebClientUtils webClientUtils;
+
+    @Override
+    public Optional<Transformer> exportTransformer(UUID uuid,
+                                                   Pageable pageable,
+                                                   HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Optional<Transformer>>() {},
+                "/de?uuid=" + uuid.toString(),
+                httpServletRequest
+        ).block();
+    }
+
+    @Override
+    public Page<Transformer> exportAllTransformers(Pageable pageable, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Page<Transformer>>() {},
+                "/ded",
+                httpServletRequest
+        ).block();
+    }
+
+    @Override
+    public Page<Alert> getAllErrors(Pageable pageable, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Page<Alert>>() {},
+                "/ss",
+                httpServletRequest
+        ).block();
+    }
+
+    @Override
+    public Page<Alert> getCriticalAlerts(Pageable pageable, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Page<Alert>>() {},
+                "/aw",
+                httpServletRequest
+        ).block();
+    }
+
+    @Override
+    public Page<String> exportTransformerLogs(UUID uuid, Pageable pageable, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Page<String>>() {},
+                "/ff",
+                httpServletRequest
+        ).block();
+    }
+}

@@ -1,4 +1,4 @@
-package com.ipze.domain.mongo;
+package com.ipze.dto;
 
 public enum TransformerStatus {
     NORMAL,

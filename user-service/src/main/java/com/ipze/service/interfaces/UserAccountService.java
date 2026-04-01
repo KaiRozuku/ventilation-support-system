@@ -14,6 +14,4 @@ public interface UserAccountService {
     void changeEmail(ChangeEmailRequest request, HttpServletRequest httpServletRequest);
 
     void logout(HttpServletRequest request);
-
-    void refreshToken(HttpServletRequest httpServletRequest);
 }

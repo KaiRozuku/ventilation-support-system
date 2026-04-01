@@ -1,9 +1,11 @@
-package com.ipze.domain.mongo;
+package com.ipze.mongo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @Builder
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class Alert {
-    private Long id;
+    private UUID uuid;
 
     private Long transformerId;
 

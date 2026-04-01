@@ -53,8 +53,4 @@ public class UserAccountServiceImpl implements UserAccountService {
                 httpServletRequest
         ).block();
     }
-
-    @Override
-    public void refreshToken(HttpServletRequest httpServletRequest) {
-    }
 }

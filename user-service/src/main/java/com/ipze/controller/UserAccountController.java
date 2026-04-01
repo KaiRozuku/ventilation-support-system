@@ -47,10 +47,4 @@ public class UserAccountController {
         userAccountService.logout(httpServletRequest);
         return ResponseEntity.noContent().build();
     }
-
-    @PostMapping("/refreshToken")
-    public ResponseEntity<?> refreshToken(HttpServletRequest httpServletRequest){
-        userAccountService.refreshToken(httpServletRequest);
-        return ResponseEntity.ok().build();
-    }
 }

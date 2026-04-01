@@ -1,73 +1,87 @@
-//package com.ipze.service.impl;
-//
-//import com.ipze.domain.mongo.Alert;
-//import com.ipze.domain.mongo.Transformer;
-//import com.ipze.dto1.request.TransformerRequest;
-//import com.ipze.exception.TransformerNotFoundException;
-//import com.ipze.service.interfaces.AdminService;
-//import com.ipze.service.AlertService;
-//import com.ipze.service.interfaces.OperatorService;
-//import com.ipze.service.TransformerService;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.stereotype.Service;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Service
-//@RequiredArgsConstructor
-//public class AdminServiceImpl implements AdminService {
-//    private final TransformerService transformerService;
-//    private final AlertService alertService;
-//    private final OperatorService operatorService;
-//
-//    public void createTransformer(TransformerRequest request) {
-//        transformerService.create(request);
-//    }
-//
-//    @Override
-//    public void updateTransformer(Long id, TransformerRequest request) {
-//        transformerService.update(id, request);
-//    }
-//
-//    @Override
-//    public void deactivateTransformer(Long id) {
-//        transformerService.deactivate(id);
-//    }
-//
-//    @Override
-//    public Optional<Transformer> exportTransformer(Long id) {
-//        return operatorService.getTransformer(id);
-//    }
-//
-//    @Override
-//    public List<Transformer> exportTransformersRange(Long fromId, Long toId) {
-//        return transformerService.getAll().stream()
-//                .filter(t -> t.getId() >= fromId && t.getId() <= toId)
-//                .toList();
-//    }
-//
-//    @Override
-//    public List<Transformer> exportAllTransformers() {
-//        return operatorService.getAllTransformers();
-//    }
-//
-//    @Override
-//    public List<Alert> getAllErrors() {
-//        return alertService.findAll();
-//    }
-//
-//    @Override
-//    public List<Alert> getCriticalAlerts() {
-//        return alertService.findAll();
-//    }
-//
-//    @Override
-//    public List<String> exportTransformerLogs(Long id) {
-//        return transformerService.getById(id)
-//                .orElseThrow(TransformerNotFoundException::new)
-//                .getDataLogs()
-//                .stream()
-//                .map(Object::toString)
-//                .toList();
-//    }
-//}
+package com.ipze.service.impl;
+
+import com.ipze.dto.Alert;
+import com.ipze.dto.Transformer;
+import com.ipze.dto.request.TransformerRequest;
+import com.ipze.service.interfaces.AdminService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor //add real uris
+public class AdminServiceImpl implements AdminService {
+    private final WebClientUtils webClientUtils;
+
+    public void createTransformer(TransformerRequest request, HttpServletRequest httpServletRequest) {
+        webClientUtils.sendPostRequest("/rt",
+                request,
+                new ParameterizedTypeReference<TransformerRequest>(){},
+                httpServletRequest
+        ).block();
+    }
+
+    @Override
+    public void updateTransformer(TransformerRequest request, HttpServletRequest httpServletRequest) {
+        webClientUtils.sendPutRequest("/dd",
+                request,
+                new ParameterizedTypeReference<TransformerRequest>() {},
+                httpServletRequest
+                ).block();
+    }
+
+    @Override
+    public void deactivateTransformer(UUID uuid, HttpServletRequest httpServletRequest) {
+        webClientUtils.sendPutRequest("/gh" + uuid.toString(),
+                httpServletRequest
+        ).block();
+    }
+
+    @Override
+    public Transformer exportTransformer(UUID uuid, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(new ParameterizedTypeReference<Transformer>(){},
+                "/export?uuid=" + uuid.toString(),
+                httpServletRequest).block();
+    }
+
+    @Override
+    public Page<Transformer> exportAllTransformers(Pageable pageable, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Page<Transformer>>() {},
+                "/fd",
+                httpServletRequest
+                ).block();
+    }
+
+    @Override
+    public Page<Alert> getAllErrors(Pageable pageable, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Page<Alert>>() {},
+                "/all",
+                httpServletRequest
+                ).block();
+    }
+
+    @Override
+    public Page<Alert> getCriticalAlerts(Pageable pageable, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Page<Alert>>() {},
+                "/fgd",
+                httpServletRequest
+        ).block();
+    }
+
+    @Override
+    public Page<String> exportTransformerLogs(UUID uuid, Pageable pageable, HttpServletRequest httpServletRequest) {
+        return webClientUtils.sendGetRequest(
+                new ParameterizedTypeReference<Page<String>>() {},
+                "/fdg" + uuid.toString(),
+                httpServletRequest
+                ).block();
+    }
+}

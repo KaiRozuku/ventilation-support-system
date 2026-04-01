@@ -1,24 +1,27 @@
 package com.ipze.service.interfaces;
 
 
-import com.ipze.domain.mongo.Alert;
-import com.ipze.domain.mongo.Transformer;
-import com.ipze.domain.mongo.TransformerStatus;
+import com.ipze.dto.Alert;
+import com.ipze.dto.Transformer;
+import com.ipze.dto.TransformerStatus;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface OperatorService {
 
-    List<Transformer> getAllTransformers();
+    Page<Transformer> getAllTransformers(Pageable pageable, HttpServletRequest httpServletRequest);
 
-    Optional<Transformer> getTransformer(Long id);
+    Optional<Transformer> getTransformer(UUID uuid, HttpServletRequest httpServletRequest);
 
-    TransformerStatus getTransformerStatus(Long id);
+    TransformerStatus getTransformerStatus(UUID uuid, HttpServletRequest httpServletRequest);
 
-    List<Alert> getTransformerAlerts(Long id);
+    Page<Alert> getTransformerAlerts(UUID uuid, Pageable pageable, HttpServletRequest httpServletRequest);
 
-    List<TransformerStatus> getAllTransformersStatus();
+    Page<TransformerStatus> getAllTransformersStatus(Pageable pageable, HttpServletRequest httpServletRequest);
 
-    Alert addErrorProcessing(Long transformerId);
+    void addErrorProcessing(UUID uuid, HttpServletRequest httpServletRequest);
 }

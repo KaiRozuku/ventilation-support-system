@@ -1,23 +1,23 @@
 package com.ipze.service.interfaces;
 
+import com.ipze.dto.Alert;
+import com.ipze.dto.Transformer;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import com.ipze.domain.mongo.Alert;
-import com.ipze.domain.mongo.Transformer;
-
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface DataAnalystService {
 
-    Optional<Transformer> exportTransformer(Long id);
+    Optional<Transformer> exportTransformer(UUID uuid, Pageable pageable, HttpServletRequest httpServletRequest);
 
-    List<Transformer> exportTransformersRange(Long fromId, Long toId);
+    Page<Transformer> exportAllTransformers(Pageable pageable, HttpServletRequest httpServletRequest);
 
-    List<Transformer> exportAllTransformers();
+    Page<Alert> getAllErrors(Pageable pageable, HttpServletRequest httpServletRequest);
 
-    List<Alert> getAllErrors();
+    Page<Alert> getCriticalAlerts(Pageable pageable, HttpServletRequest httpServletRequest);
 
-    List<Alert> getCriticalAlerts();
-
-    List<String> exportTransformerLogs(Long id);
+    Page<String> exportTransformerLogs(UUID uuid, Pageable pageable, HttpServletRequest httpServletRequest);
 }
