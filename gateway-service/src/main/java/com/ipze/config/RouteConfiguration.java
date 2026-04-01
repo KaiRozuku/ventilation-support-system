@@ -20,16 +20,14 @@ public class RouteConfiguration {
                                 "/auth-service/(?<segment>.*)",
                                 "/auth/${segment}")
                                 .filter(authFilter))
-                        .uri("http://localhost:8080"))
-//                        .uri("lb://auth-service"))
+                        .uri("lb://auth-service"))
 
                 .route("user-service", r -> r
                         .path("/user-service/**")
                         .filters(f -> f
                                 .rewritePath("/user-service/(?<segment>.*)", "/user/${segment}")
                                 .filter(authFilter))
-                        .uri("http://localhost:8084"))
-//                        .uri("lb://user-service"))
+                       .uri("lb://user-service"))
 
                 .build();
     }
