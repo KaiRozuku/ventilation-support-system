@@ -1,7 +1,7 @@
 package com.ipze.service;
 
-import com.ipze.dto.request.UserDto;
 import com.ipze.model.postgres.Role;
+import com.ipze.model.postgres.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,11 +9,11 @@ import java.util.UUID;
 
 public interface AuthCreatorService {
 
-    Page<UserDto> getAllUsers(Pageable pageable);
+    Page<User> getAllUsers(Pageable pageable);
 
-    Page<UserDto> getUsersByRole(Role role, Pageable pageable);
+    Page<User> getUsersByRole(Role role, Pageable pageable);
 
-    UserDto getUserByEmail(String email);
+    User getUserByEmail(String email);
 
     void changeRoleOfUser(UUID uuid, Role role);
 }

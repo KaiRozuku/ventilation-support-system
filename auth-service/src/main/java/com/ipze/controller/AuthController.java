@@ -5,6 +5,7 @@ import com.ipze.dto.request.RefreshTokenRequestDto;
 import com.ipze.dto.request.RegisterRequest;
 import com.ipze.dto.response.AuthResponse;
 import com.ipze.dto.response.JwtResponse;
+import com.ipze.mapper.UserMapper;
 import com.ipze.model.postgres.Role;
 import com.ipze.security.JwtService;
 import com.ipze.service.AuthService;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -27,6 +29,7 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final UserMapper userMapper;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -40,7 +43,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
 
-        var user = authService.login(request);
+        var user = userMapper.toDto(authService.login(request));
 
         String accessToken =
                 jwtService.generateAccessToken(

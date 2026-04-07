@@ -1,0 +1,20 @@
+server:
+  port: 8083
+
+spring:
+
+  application:
+    name: chat-service
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  data:
+    mongodb:
+      uri: mongodb://admin:secret@localhost:27017/mydatabase
+#      username: dfdfd
+#      password: ew
+#docker exec -it my-mongo mongo -u admin -p secret --authenticationDatabase admin

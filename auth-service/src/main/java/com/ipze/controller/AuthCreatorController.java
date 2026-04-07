@@ -1,5 +1,6 @@
 package com.ipze.controller;
 
+import com.ipze.mapper.UserMapper;
 import com.ipze.model.postgres.Role;
 import com.ipze.service.AuthCreatorService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class AuthCreatorController {
 
     private final AuthCreatorService creatorService;
+    private final UserMapper userMapper;
 
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(@PageableDefault final Pageable pageable,
@@ -26,9 +28,9 @@ public class AuthCreatorController {
                                          @RequestParam(value = "email", required = false) String email
                                                      ) {
         return ResponseEntity.ok(
-                (role != null) ? creatorService.getUsersByRole(role,pageable) :
-                (email != null) ? creatorService.getUserByEmail(email) :
-                creatorService.getAllUsers(pageable)
+                (role != null) ? creatorService.getUsersByRole(role,pageable).map(userMapper::toDto) :
+                (email != null) ? userMapper.toDto(creatorService.getUserByEmail(email)) :
+                creatorService.getAllUsers(pageable).map(userMapper::toDto)
         );
     }
 

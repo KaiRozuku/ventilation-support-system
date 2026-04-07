@@ -26,7 +26,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserMapper userMapper;
 
     @Override
     @Transactional
@@ -48,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDto login(LoginRequest request) {
+    public User login(LoginRequest request) {
         User user = userRepository.findUserByEmail(request.email())
                 .orElseThrow(UserNotFoundException::new);
 
@@ -57,6 +56,6 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidPasswordOrEmailException();
         }
 
-        return userMapper.toDto(user);
+        return user;
     }
 }

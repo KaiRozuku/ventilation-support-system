@@ -1,9 +1,6 @@
 package com.ipze.service.impl;
 
-
-import com.ipze.dto.request.UserDto;
 import com.ipze.exception.UserNotFoundException;
-import com.ipze.mapper.UserMapper;
 import com.ipze.model.postgres.Role;
 import com.ipze.model.postgres.User;
 import com.ipze.repository.UserRepository;
@@ -21,29 +18,24 @@ import java.util.UUID;
 public class AuthCreatorServiceImpl implements AuthCreatorService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
     @Override
-    public Page<UserDto> getAllUsers(Pageable pageable) {
+    public Page<User> getAllUsers(Pageable pageable) {
         return userRepository
-                .findAll(pageable)
-                .map(userMapper::toDto);
+                .findAll(pageable);
     }
 
     @Override
-    public Page<UserDto> getUsersByRole(Role role, Pageable pageable) {
+    public Page<User> getUsersByRole(Role role, Pageable pageable) {
         return userRepository
-                .findAllByRole(role, pageable)
-                .map(userMapper::toDto);
+                .findAllByRole(role, pageable);
     }
 
     @Override
-    public UserDto getUserByEmail(String email) {
-        return userMapper.toDto(
-                userRepository
+    public User getUserByEmail(String email) {
+        return userRepository
                         .findUserByEmail(email)
-                .orElseThrow(UserNotFoundException::new)
-        );
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional

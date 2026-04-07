@@ -1,0 +1,34 @@
+#services:
+#  chat-instance1:
+#    depends_on:
+#      - dragonflydb
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=instance1
+#    ports:
+#      - "8881:8083"
+#
+#  chat-instance2:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=instance2
+#    ports:
+#      - "8882:8083"
+#
+#  chat-instance3:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=default
+#    ports:
+#      - "8083:8083"
+#
+#  dragonflydb:
+#    image: docker.dragonflydb.io/dragonflydb/dragonfly
+#    ports:
+#      - "6379:6379"

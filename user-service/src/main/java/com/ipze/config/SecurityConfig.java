@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/user/account/**").authenticated()
+                        .requestMatchers("/chat/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(authUserFilter, UsernamePasswordAuthenticationFilter.class)
