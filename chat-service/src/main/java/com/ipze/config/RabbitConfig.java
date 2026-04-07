@@ -23,8 +23,8 @@ public class RabbitConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory factory = new CachingConnectionFactory(rabbitProperties.relayHost());
-        factory.setUsername(rabbitProperties.clientLogin());
+        CachingConnectionFactory factory = new CachingConnectionFactory(rabbitProperties.host());
+        factory.setUsername(rabbitProperties.username());
         factory.setPassword(rabbitProperties.password());
         return factory;
     }

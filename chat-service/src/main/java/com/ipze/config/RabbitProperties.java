@@ -1,17 +1,12 @@
 package com.ipze.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
-@Component
-public record RabbitProperties (
-    @Value("${spring.rabbitmq.host}")
-    String relayHost,
-    @Value("${spring.rabbitmq.port}")
-    int port,
-    @Value("${spring.rabbitmq.username}")
-    String clientLogin,
-    @Value("${spring.rabbitmq.password}")
-    String password)
-{}
+@ConfigurationProperties(prefix = "spring.rabbitmq")
+public record RabbitProperties(
+        String host,
+        int port,
+        String username,
+        String password
+) {}

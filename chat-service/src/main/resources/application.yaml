@@ -7,14 +7,14 @@ spring:
     name: chat-service
 
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: {RABBIT_HOST}
+    port: {RABBIT_PORT}
+    username: {RABBIT_USERNAME}
+    password: {RABBIT_PASSWORD}
 
   data:
     mongodb:
-      uri: mongodb://admin:secret@localhost:27017/mydatabase
+      uri: {MONGO_URI}
 #      username: dfdfd
 #      password: ew
 #docker exec -it my-mongo mongo -u admin -p secret --authenticationDatabase admin

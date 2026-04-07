@@ -32,7 +32,7 @@ public class GatewayServiceFilter implements GatewayFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
 
-        if (securityProperties.getExcludedUrls().stream()
+        if (securityProperties.excludedUrls().stream()
                 .anyMatch(pattern -> new AntPathMatcher().match(pattern, path))) {
             return chain.filter(exchange);
         }
@@ -44,7 +44,7 @@ public class GatewayServiceFilter implements GatewayFilter {
 
         try {
             Claims claims = Jwts.parser()
-                    .verifyWith(Keys.hmacShaKeyFor(securityProperties.getSecretKey().getBytes(StandardCharsets.UTF_8)))
+                    .verifyWith(Keys.hmacShaKeyFor(securityProperties.secretKey().getBytes(StandardCharsets.UTF_8)))
                     .build()
                     .parseSignedClaims(authHeader.substring(7).trim())
                     .getPayload();

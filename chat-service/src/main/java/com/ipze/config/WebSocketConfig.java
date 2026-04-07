@@ -22,9 +22,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
         registry.enableStompBrokerRelay("/topic", "/queue")
-                .setRelayHost(rabbitProperties.relayHost())
+                .setRelayHost(rabbitProperties.host())
                 .setRelayPort(rabbitProperties.port())
-                .setClientLogin(rabbitProperties.clientLogin())
+                .setClientLogin(rabbitProperties.username())
                 .setClientPasscode(rabbitProperties.password());
     }
 }

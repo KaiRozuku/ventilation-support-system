@@ -9,6 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 public class AuthServiceApplication {
     public static void main(String[] args) {
+
         Dotenv dotenv = Dotenv.load();
 
         System.setProperty("DATABASE_URL", dotenv.get("DATABASE_URL"));
