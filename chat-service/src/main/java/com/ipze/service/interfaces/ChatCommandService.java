@@ -6,7 +6,7 @@ import com.ipze.dto.InviteStatus;
 
 public interface ChatCommandService {
 
-    void sendToUser(ChatMessageDto chatMessageDto);
+    void sendToUser(ChatMessageDto chatMessageDto); //maybe change method name?
 
     InviteStatus sendInvite(String receiverId);
 }

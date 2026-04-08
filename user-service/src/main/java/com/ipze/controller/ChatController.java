@@ -3,6 +3,7 @@ package com.ipze.controller;
 import com.ipze.dto.ChatMessageDto;
 import com.ipze.dto.MessageType;
 import com.ipze.service.interfaces.ChatMessageService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,12 @@ public class ChatController {
         chatMessageService.sendToUser(dto);
 
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<?> getHistory(HttpServletRequest httpServletRequest){
+        chatMessageService.getHistory(httpServletRequest);
+        return ResponseEntity.ok().build();
     }
 
 //    @PostMapping("/invite")

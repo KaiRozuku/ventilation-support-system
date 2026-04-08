@@ -1,15 +1,12 @@
 package com.ipze;
 
-import com.ipze.config.RabbitProperties;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-@EnableConfigurationProperties(RabbitProperties.class)
 public class ChatServiceApplication {
     public static void main(String[] args) {
 

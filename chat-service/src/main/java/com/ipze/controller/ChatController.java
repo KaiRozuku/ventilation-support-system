@@ -23,7 +23,7 @@ public class ChatController {
         if(dto.getRoomId() == null || dto.getRoomId().isEmpty()){
             dto.setRoomId(UUID.nameUUIDFromBytes((dto.getSenderId() + dto.getReceiverId()).getBytes()).toString());
         }
-        rabbitProducer.send(dto); // RabbitMQ → Listener
+        rabbitProducer.send(dto);
     }
 
     @MessageMapping("/chat.addUser")

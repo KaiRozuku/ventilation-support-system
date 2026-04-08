@@ -1,7 +1,8 @@
 package com.ipze.controller;
 
-import com.ipze.entity.ChatMessage;
+import com.ipze.dto.ChatMessageDto;
 import com.ipze.dto.InviteStatus;
+import com.ipze.mapper.ChatMessageMapper;
 import com.ipze.service.interfaces.ChatCommandService;
 import com.ipze.service.interfaces.ChatQueryService;
 import lombok.RequiredArgsConstructor;
@@ -22,16 +23,37 @@ public class ChatQueryController {
 
     private final ChatQueryService chatQueryService;
     private final ChatCommandService chatCommandService;
+    private final ChatMessageMapper chatMessageMapper;
 
     @GetMapping("/history")
-    public ResponseEntity<List<ChatMessage>> getHistory(@RequestParam String senderId,
+    public ResponseEntity<List<ChatMessageDto>> getHistory(@RequestParam String senderId,
                                                         @RequestParam String receiverId) {
-        return ResponseEntity.ok(chatQueryService.getHistory(senderId, receiverId));
+        return ResponseEntity.ok(
+                chatQueryService.getHistory(senderId, receiverId)
+                        .stream()
+                        .map(chatMessageMapper::toDto)
+                        .toList()
+        );
     }
 
     @GetMapping("/room/{roomUuid}")
-    public ResponseEntity<List<ChatMessage>> getByRoom(@PathVariable String roomUuid) {
-        return ResponseEntity.ok(chatQueryService.getByRoom(roomUuid));
+    public ResponseEntity<List<ChatMessageDto>> getByRoom(@PathVariable String roomUuid) {
+        return ResponseEntity.ok(
+                chatQueryService.getByRoom(roomUuid)
+                        .stream()
+                        .map(chatMessageMapper::toDto)
+                        .toList()
+        );
+    }
+
+    @GetMapping("/inb")
+    public ResponseEntity<List<ChatMessageDto>> getInbox(@RequestParam String receiverId){
+        return ResponseEntity.ok(
+                chatQueryService.getUserInbox(receiverId)
+                        .stream()
+                        .map(chatMessageMapper::toDto)
+                        .toList()
+        );
     }
 
     @PostMapping("/room/create")

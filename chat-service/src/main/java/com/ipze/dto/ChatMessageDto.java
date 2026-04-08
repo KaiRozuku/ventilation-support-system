@@ -19,13 +19,13 @@ public class ChatMessageDto implements Serializable {
 
     private String content;
 
-    private String senderId;
-
-    private String receiverId;
+    private LocalDateTime timestamp;
 
     private String roomId;
 
-    private LocalDateTime timestamp;
+    private String senderId;
+
+    private String receiverId;
 
     private MessageType messageType;
 }

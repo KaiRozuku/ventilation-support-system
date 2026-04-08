@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class ChatQueryServiceImpl implements ChatQueryService {
@@ -28,5 +29,4 @@ public class ChatQueryServiceImpl implements ChatQueryService {
     public List<ChatMessage> getByRoom(String roomId) {
         return chatMessageRepository.findAllByRoomIdOrderByTimestampAsc(roomId);
     }
-
 }
