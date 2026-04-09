@@ -25,8 +25,8 @@ public class CreatorServiceImpl implements CreatorService {
     public Page<UserDto> getAllUsers(Pageable pageable, HttpServletRequest request) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<UserDto>>() {},
-                "/auth-service/api/creator/users?page=" + pageable.getPageNumber()
-                        + "&size=" + pageable.getPageSize(),
+                String.format("/auth-service/api/creator/users?page=%d&size=%d",
+                        pageable.getPageNumber(), pageable.getPageSize()),
                 request
         ).block();
     }
@@ -35,9 +35,8 @@ public class CreatorServiceImpl implements CreatorService {
     public Page<UserDto> getUsersByRole(Role role, Pageable pageable, HttpServletRequest request) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<UserDto>>() {},
-                "/auth-service/api/creator/users?page=" + pageable.getPageNumber()
-                        + "&size=" + pageable.getPageSize()
-                        + "&role=" + role.name(),
+                String.format("/auth-service/api/creator/users?page=%d&size=%d&role=%s",
+                        pageable.getPageNumber(), pageable.getPageSize(), role.name()),
                 request
         ).block();
     }
@@ -46,7 +45,7 @@ public class CreatorServiceImpl implements CreatorService {
     public UserDto getUserByEmail(String email, HttpServletRequest request) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<UserDto>() {},
-                "/auth-service/api/creator/users?email=" + email,
+                String.format("/auth-service/api/creator/users?email=%s",  email),
                 request
         ).block();
     }
@@ -54,7 +53,7 @@ public class CreatorServiceImpl implements CreatorService {
     @Override
     public void changeRoleOfUser(UUID id, Role role, HttpServletRequest request) {
         webClientUtils.sendPutRequest(
-                "/auth-service/api/creator/users/" + id + "?role=" + role.name(),
+                String.format("/auth-service/api/creator/users/%s?role=%s", id, role.name()),
                 request
         ).block();
     }

@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ChatQueryService {
 
-    List<ChatMessage> getHistory(String senderId, String receiverId);
+    List<ChatMessage> getMessagesFromChat(String senderId, String receiverId);
 
-    List<ChatMessage> getUserInbox(String receiverId);
+    List<ChatMessage> getUserIncomingMessages(String receiverId);
 
-    List<ChatMessage> getByRoom(String roomId);
+    List<ChatMessage> getMessagesFromGroup(String roomId);
 }

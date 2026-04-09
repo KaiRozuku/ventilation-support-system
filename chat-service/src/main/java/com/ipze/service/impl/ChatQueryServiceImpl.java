@@ -16,17 +16,17 @@ public class ChatQueryServiceImpl implements ChatQueryService {
     private final ChatMessageRepository chatMessageRepository;
 
     @Override
-    public List<ChatMessage> getHistory(String senderId, String receiverId) {
+    public List<ChatMessage> getMessagesFromChat(String senderId, String receiverId) {
         return chatMessageRepository.findChat(senderId, receiverId);
     }
 
     @Override
-    public List<ChatMessage> getUserInbox(String receiverId) {
+    public List<ChatMessage> getUserIncomingMessages(String receiverId) {
         return chatMessageRepository.findAllByReceiverIdOrderByTimestampAsc(receiverId);
     }
 
     @Override
-    public List<ChatMessage> getByRoom(String roomId) {
+    public List<ChatMessage> getMessagesFromGroup(String roomId) {
         return chatMessageRepository.findAllByRoomIdOrderByTimestampAsc(roomId);
     }
 }

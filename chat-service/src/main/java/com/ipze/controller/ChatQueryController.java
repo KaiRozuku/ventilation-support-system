@@ -1,68 +1,54 @@
 package com.ipze.controller;
 
 import com.ipze.dto.ChatMessageDto;
-import com.ipze.dto.InviteStatus;
 import com.ipze.mapper.ChatMessageMapper;
-import com.ipze.service.interfaces.ChatCommandService;
 import com.ipze.service.interfaces.ChatQueryService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
-
-@Slf4j
+// * Спочатку надати доступ лише p2p спілкуванню
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/chat/api")
 @RequiredArgsConstructor
 public class ChatQueryController {
 
     private final ChatQueryService chatQueryService;
-    private final ChatCommandService chatCommandService;
     private final ChatMessageMapper chatMessageMapper;
 
-    @GetMapping("/history")
-    public ResponseEntity<List<ChatMessageDto>> getHistory(@RequestParam String senderId,
-                                                        @RequestParam String receiverId) {
+
+    @GetMapping("/users/{senderId}/messages/{receiverId}")
+    public ResponseEntity<List<ChatMessageDto>> messagesFromChat(
+            @PathVariable String senderId,
+            @PathVariable String receiverId
+    ) {
         return ResponseEntity.ok(
-                chatQueryService.getHistory(senderId, receiverId)
+                chatQueryService.getMessagesFromChat(senderId, receiverId)
                         .stream()
                         .map(chatMessageMapper::toDto)
                         .toList()
         );
     }
 
-    @GetMapping("/room/{roomUuid}")
-    public ResponseEntity<List<ChatMessageDto>> getByRoom(@PathVariable String roomUuid) {
+    @GetMapping("/rooms/{roomId}/messages")
+    public ResponseEntity<List<ChatMessageDto>> messagesFromGroup(@PathVariable String roomId) {
         return ResponseEntity.ok(
-                chatQueryService.getByRoom(roomUuid)
+                chatQueryService.getMessagesFromGroup(roomId)
                         .stream()
                         .map(chatMessageMapper::toDto)
                         .toList()
         );
     }
 
-    @GetMapping("/inb")
-    public ResponseEntity<List<ChatMessageDto>> getInbox(@RequestParam String receiverId){
+    @GetMapping("/users/{userId}/messages/incoming")
+    public ResponseEntity<List<ChatMessageDto>> getIncomingMessages(@PathVariable String userId) {
         return ResponseEntity.ok(
-                chatQueryService.getUserInbox(receiverId)
+                chatQueryService.getUserIncomingMessages(userId)
                         .stream()
                         .map(chatMessageMapper::toDto)
                         .toList()
         );
-    }
-
-    @PostMapping("/room/create")
-    public ResponseEntity<String> createRoom(@RequestParam String user1,
-                                             @RequestParam String user2) {
-        if (!chatCommandService.sendInvite(user2).equals(InviteStatus.ACCEPTED)) //implement
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invite not accepted by user: " + user2);
-
-        String roomUuid = UUID.nameUUIDFromBytes((user1 + user2).getBytes()).toString();
-        return ResponseEntity.ok(roomUuid);
     }
 }

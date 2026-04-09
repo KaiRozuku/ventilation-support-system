@@ -11,8 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(
-        "/auth/api/account")
+@RequestMapping("/auth/api/account")
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("isAuthenticated()")
