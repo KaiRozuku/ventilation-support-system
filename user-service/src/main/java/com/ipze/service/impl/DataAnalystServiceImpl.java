@@ -3,7 +3,6 @@ package com.ipze.service.impl;
 import com.ipze.dto.Alert;
 import com.ipze.dto.Transformer;
 import com.ipze.service.interfaces.DataAnalystService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
@@ -21,48 +20,42 @@ public class DataAnalystServiceImpl implements DataAnalystService {
 
     @Override
     public Optional<Transformer> exportTransformer(UUID uuid,
-                                                   Pageable pageable,
-                                                   HttpServletRequest httpServletRequest) {
+                                                   Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Optional<Transformer>>() {},
-                "/de?uuid=" + uuid.toString(),
-                httpServletRequest
+                "/de?uuid=" + uuid.toString()
         ).block();
     }
 
     @Override
-    public Page<Transformer> exportAllTransformers(Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Page<Transformer> exportAllTransformers(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<Transformer>>() {},
-                "/ded",
-                httpServletRequest
+                "/ded"
         ).block();
     }
 
     @Override
-    public Page<Alert> getAllErrors(Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Page<Alert> getAllErrors(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<Alert>>() {},
-                "/ss",
-                httpServletRequest
+                "/ss"
         ).block();
     }
 
     @Override
-    public Page<Alert> getCriticalAlerts(Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Page<Alert> getCriticalAlerts(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<Alert>>() {},
-                "/aw",
-                httpServletRequest
+                "/aw"
         ).block();
     }
 
     @Override
-    public Page<String> exportTransformerLogs(UUID uuid, Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Page<String> exportTransformerLogs(UUID uuid, Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<String>>() {},
-                "/ff",
-                httpServletRequest
+                "/ff"
         ).block();
     }
 }

@@ -4,84 +4,71 @@ import com.ipze.dto.Alert;
 import com.ipze.dto.Transformer;
 import com.ipze.dto.request.TransformerRequest;
 import com.ipze.service.interfaces.AdminService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor //add real uris
 public class AdminServiceImpl implements AdminService {
+
     private final WebClientUtils webClientUtils;
 
-    public void createTransformer(TransformerRequest request, HttpServletRequest httpServletRequest) {
-        webClientUtils.sendPostRequest("/rt",
+    public Mono<Void> createTransformer(TransformerRequest request) {
+        return webClientUtils.sendPostRequest("/rt",
                 request,
-                new ParameterizedTypeReference<TransformerRequest>(){},
-                httpServletRequest
-        ).block();
+                new ParameterizedTypeReference<>(){}
+        );
     }
 
     @Override
-    public void updateTransformer(TransformerRequest request, HttpServletRequest httpServletRequest) {
-        webClientUtils.sendPutRequest("/dd",
+    public Mono<Void> updateTransformer(TransformerRequest request) {
+        return webClientUtils.sendPutRequest("/dd",
                 request,
-                new ParameterizedTypeReference<TransformerRequest>() {},
-                httpServletRequest
-                ).block();
+                new ParameterizedTypeReference<>() {}
+                );
     }
 
     @Override
-    public void deactivateTransformer(UUID uuid, HttpServletRequest httpServletRequest) {
-        webClientUtils.sendPutRequest("/gh" + uuid.toString(),
-                httpServletRequest
-        ).block();
+    public Mono<Transformer> exportTransformer(UUID uuid) {
+        return webClientUtils.sendGetRequest(new ParameterizedTypeReference<>(){},
+                "/export?uuid=" + uuid.toString()
+        );
     }
 
     @Override
-    public Transformer exportTransformer(UUID uuid, HttpServletRequest httpServletRequest) {
-        return webClientUtils.sendGetRequest(new ParameterizedTypeReference<Transformer>(){},
-                "/export?uuid=" + uuid.toString(),
-                httpServletRequest).block();
-    }
-
-    @Override
-    public Page<Transformer> exportAllTransformers(Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Mono<Page<Transformer>> exportAllTransformers(Pageable pageable) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<Page<Transformer>>() {},
-                "/fd",
-                httpServletRequest
-                ).block();
+                new ParameterizedTypeReference<>() {},
+                "/fd"
+                );
     }
 
     @Override
-    public Page<Alert> getAllErrors(Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Mono<Page<Alert>> getAllErrors(Pageable pageable) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<Page<Alert>>() {},
-                "/all",
-                httpServletRequest
-                ).block();
+                new ParameterizedTypeReference<>() {},
+                "/all"
+                );
     }
 
     @Override
-    public Page<Alert> getCriticalAlerts(Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Mono<Page<Alert>> getCriticalAlerts(Pageable pageable) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<Page<Alert>>() {},
-                "/fgd",
-                httpServletRequest
-        ).block();
+                new ParameterizedTypeReference<>() {},
+                "/fgd");
     }
 
     @Override
-    public Page<String> exportTransformerLogs(UUID uuid, Pageable pageable, HttpServletRequest httpServletRequest) {
+    public Mono<Page<String>> exportTransformerLogs(UUID uuid, Pageable pageable) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<Page<String>>() {},
-                "/fdg" + uuid.toString(),
-                httpServletRequest
-                ).block();
+                new ParameterizedTypeReference<>() {},
+                "/fdg" + uuid.toString()
+                );
     }
 }

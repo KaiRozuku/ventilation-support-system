@@ -5,11 +5,13 @@ import com.ipze.dto.request.ChangePasswordRequest;
 import com.ipze.dto.request.UpdateUserRequest;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.UUID;
+
 public interface UserAccountService {
 
-    void changePassword(ChangePasswordRequest request, HttpServletRequest httpServletRequest);
+    void changePassword(ChangePasswordRequest request, UUID userUuid);
 
-    void updateUser(UpdateUserRequest request, HttpServletRequest httpServletRequest);
+    void updateUser(UpdateUserRequest request, UUID userUuid);
 
-    void changeEmail(ChangeEmailRequest request, HttpServletRequest httpServletRequest);
+    void changeEmail(ChangeEmailRequest request, UUID userUuid);
 }

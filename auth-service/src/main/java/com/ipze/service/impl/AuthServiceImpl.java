@@ -2,11 +2,9 @@ package com.ipze.service.impl;
 
 import com.ipze.dto.request.LoginRequest;
 import com.ipze.dto.request.RegisterRequest;
-import com.ipze.dto.request.UserDto;
 import com.ipze.exception.EmailAlreadyExistException;
 import com.ipze.exception.InvalidPasswordOrEmailException;
 import com.ipze.exception.UserNotFoundException;
-import com.ipze.mapper.UserMapper;
 import com.ipze.repository.UserRepository;
 import com.ipze.model.postgres.Role;
 import com.ipze.model.postgres.User;
@@ -29,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void register(RegisterRequest request, Role role) {
+    public void register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.email())) throw new EmailAlreadyExistException();
 
         userRepository.save(
@@ -40,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
                         .email(request.email())
                         .phoneNumber(request.phoneNumber())
                         .password(passwordEncoder.encode(request.password()))
-                        .role(role != null ? role : Role.UNDEFINED)
+                        .role(Role.UNDEFINED)
                         .active(true)
                         .build()
         );

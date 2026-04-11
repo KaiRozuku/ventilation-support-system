@@ -34,7 +34,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
 
-        authService.register(request, Role.UNDEFINED);
+        authService.register(request);
         return ResponseEntity
                 .ok()
                 .build();

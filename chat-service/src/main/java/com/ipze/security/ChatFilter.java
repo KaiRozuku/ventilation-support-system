@@ -1,11 +1,10 @@
-package com.ipze.config;
+package com.ipze.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Component
-public class UserFilter extends OncePerRequestFilter {
+public class ChatFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -37,17 +36,13 @@ public class UserFilter extends OncePerRequestFilter {
 
             var authentication = new UsernamePasswordAuthenticationToken(
                     new LocalUserDetails(userId, username, authorities),
-                    request.getHeader(HttpHeaders.AUTHORIZATION),
+                    null,
                     authorities
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        try {
-            filterChain.doFilter(request, response);
-        } finally {
-            SecurityContextHolder.clearContext();
-        }
+        filterChain.doFilter(request, response);
     }
 }

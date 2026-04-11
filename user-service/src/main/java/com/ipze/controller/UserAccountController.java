@@ -4,7 +4,6 @@ import com.ipze.dto.request.ChangeEmailRequest;
 import com.ipze.dto.request.ChangePasswordRequest;
 import com.ipze.dto.request.UpdateUserRequest;
 import com.ipze.service.interfaces.UserAccountService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,29 +21,26 @@ public class UserAccountController {
     private final UserAccountService userAccountService;
 
     @PutMapping("/password")
-    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequest request,
-                                               HttpServletRequest httpRequest) {
-        userAccountService.changePassword(request, httpRequest);
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequest request) {
+        userAccountService.changePassword(request);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/name")
-    public ResponseEntity<Void> changeUser(@RequestBody UpdateUserRequest request,
-                                           HttpServletRequest httpRequest) {
-        userAccountService.updateUser(request, httpRequest);
+    public ResponseEntity<Void> changeUser(@RequestBody UpdateUserRequest request) {
+        userAccountService.updateUser(request);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/email")
-    public ResponseEntity<Void> changeEmail(@RequestBody ChangeEmailRequest request,
-                                            HttpServletRequest httpRequest) {
-        userAccountService.changeEmail(request, httpRequest);
+    public ResponseEntity<Void> changeEmail(@RequestBody ChangeEmailRequest request) {
+        userAccountService.changeEmail(request);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest httpServletRequest){
-        userAccountService.logout(httpServletRequest);
+    public ResponseEntity<?> logout(){
+        userAccountService.logout();
         return ResponseEntity.noContent().build();
     }
 }

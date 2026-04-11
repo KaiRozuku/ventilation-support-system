@@ -4,27 +4,25 @@ package com.ipze.service.interfaces;
 import com.ipze.dto.Alert;
 import com.ipze.dto.request.TransformerRequest;
 import com.ipze.dto.Transformer;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
 public interface AdminService  {
 
-    Transformer exportTransformer(UUID uuid, HttpServletRequest httpServletRequest);
+    Mono<Transformer> exportTransformer(UUID uuid);
 
-    Page<Transformer> exportAllTransformers(Pageable pageable, HttpServletRequest httpServletRequest);
+    Mono<Page<Transformer>> exportAllTransformers(Pageable pageable);
 
-    Page<Alert> getAllErrors(Pageable pageable, HttpServletRequest httpServletRequest);
+    Mono<Page<Alert>> getAllErrors(Pageable pageable);
 
-    Page<Alert> getCriticalAlerts(Pageable pageable, HttpServletRequest httpServletRequest);
+    Mono<Page<Alert>> getCriticalAlerts(Pageable pageable);
 
-    Page<String> exportTransformerLogs(UUID uuid, Pageable pageable, HttpServletRequest httpServletRequest);
+    Mono<Page<String>> exportTransformerLogs(UUID uuid, Pageable pageable);
 
-    void createTransformer(TransformerRequest request, HttpServletRequest httpServletRequest);
+    Mono<Void> createTransformer(TransformerRequest request);
 
-    void updateTransformer(TransformerRequest request, HttpServletRequest httpServletRequest);
-
-    void deactivateTransformer(UUID uuid, HttpServletRequest httpServletRequest);
+    Mono<Void> updateTransformer(TransformerRequest request);
 }

@@ -24,7 +24,7 @@ public class ApplicationUserDetailsService implements UserDetailsService {
                 .orElseThrow(UserNotFoundException::new);
 
         return new ApplicationUserDetails(
-                user.getUserID().toString(),
+                user.getUserID(),
                 user.getUsername(),
                 List.of(new SimpleGrantedAuthority(user.getRole().name()))
         );

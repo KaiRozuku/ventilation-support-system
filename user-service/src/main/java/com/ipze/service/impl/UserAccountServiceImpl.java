@@ -4,7 +4,6 @@ import com.ipze.dto.request.ChangeEmailRequest;
 import com.ipze.dto.request.ChangePasswordRequest;
 import com.ipze.dto.request.UpdateUserRequest;
 import com.ipze.service.interfaces.UserAccountService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -16,41 +15,37 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final WebClientUtils webClientUtils;
 
     @Override
-    public void changePassword(ChangePasswordRequest request, HttpServletRequest httpServletRequest) {
+    public void changePassword(ChangePasswordRequest request) {
         webClientUtils.sendPutRequest(
                 "/auth-service/api/account/password",
                 request,
-                new ParameterizedTypeReference<ChangePasswordRequest>() {},
-                httpServletRequest
+                new ParameterizedTypeReference<ChangePasswordRequest>() {}
         ).block();
 
     }
 
     @Override
-    public void updateUser(UpdateUserRequest request, HttpServletRequest httpServletRequest) {
+    public void updateUser(UpdateUserRequest request) {
         webClientUtils.sendPutRequest(
                 "/auth-service/api/account",
                 request,
-                new ParameterizedTypeReference<Void>() {},
-                httpServletRequest
+                new ParameterizedTypeReference<Void>() {}
         ).block();
     }
 
     @Override
-    public void changeEmail(ChangeEmailRequest request, HttpServletRequest httpServletRequest) {
+    public void changeEmail(ChangeEmailRequest request) {
         webClientUtils.sendPutRequest(
                 "/auth-service/api/account/email",
                 request,
-                new ParameterizedTypeReference<Void>() {},
-                httpServletRequest
+                new ParameterizedTypeReference<Void>() {}
         ).block();
     }
 
     @Override
-    public void logout(HttpServletRequest httpServletRequest) {
+    public void logout() {
         webClientUtils.sendPutRequest(
-                "/auth-service/auth/logout",
-                httpServletRequest
+                "/auth-service/auth/logout"
         ).block();
     }
 }

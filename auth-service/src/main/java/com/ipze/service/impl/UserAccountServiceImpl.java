@@ -10,7 +10,6 @@ import com.ipze.model.postgres.User;
 import com.ipze.repository.UserRepository;
 import com.ipze.service.UserAccountService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +27,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private String getCurrentUserId(HttpServletRequest request) {
-        return request.getHeader("X-User-ID");
-    }
 
     private boolean hasValue(String string) {
         return !ObjectUtils.isEmpty(string);
@@ -38,10 +34,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     @Transactional
-    public void changePassword(ChangePasswordRequest request, HttpServletRequest httpServletRequest) {
-        String id = getCurrentUserId(httpServletRequest);
+    public void changePassword(ChangePasswordRequest request, UUID userUuid) {
 
-        User user = userRepository.findById(UUID.fromString(id))
+        User user = userRepository.findById(userUuid)
                 .orElseThrow(UserNotFoundException::new);
 
         if (!hasValue(request.oldPassword())
@@ -53,9 +48,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     @Transactional
-    public void updateUser(UpdateUserRequest request, HttpServletRequest httpServletRequest) {
-        String id = getCurrentUserId(httpServletRequest);
-        User user = userRepository.findById(UUID.fromString(id)).orElseThrow(UserNotFoundException::new);
+    public void updateUser(UpdateUserRequest request, UUID userUuid) {
+        User user = userRepository.findById(userUuid).orElseThrow(UserNotFoundException::new);
 
         if (hasValue(request.firstNameUKR())) user.setFirstNameUKR(request.firstNameUKR());
         if (hasValue(request.lastNameUKR())) user.setLastNameUKR(request.lastNameUKR());
@@ -64,9 +58,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     @Transactional
-    public void changeEmail(ChangeEmailRequest request, HttpServletRequest httpServletRequest) {
-        String id = getCurrentUserId(httpServletRequest);
-        User user = userRepository.findById(UUID.fromString(id)).orElseThrow(UserNotFoundException::new);
+    public void changeEmail(ChangeEmailRequest request, UUID userUuid) {
+        User user = userRepository.findById(userUuid).orElseThrow(UserNotFoundException::new);
 
         if (!hasValue(request.newEmail())) {
             throw new InvalidEmailException("Email cannot be null or empty");

@@ -2,7 +2,6 @@ package com.ipze.controller;
 
 import com.ipze.dto.Role;
 import com.ipze.service.interfaces.CreatorService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -25,23 +24,21 @@ public class CreatorController {
     public ResponseEntity<?> getUsers(
             @RequestParam(value = "role", required = false) Role role,
             @RequestParam(value = "email", required = false) String email,
-            @PageableDefault Pageable pageable,
-            HttpServletRequest request
+            @PageableDefault Pageable pageable
     ) {
         return ResponseEntity.ok(
-                (email != null) ? creatorService.getUserByEmail(email, request)
-                        : (role != null) ? creatorService.getUsersByRole(role, pageable, request)
-                        : creatorService.getAllUsers(pageable, request)
+                (email != null) ? creatorService.getUserByEmail(email)
+                        : (role != null) ? creatorService.getUsersByRole(role, pageable)
+                        : creatorService.getAllUsers(pageable)
         );
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<String> changeUserRole(
             @PathVariable UUID id,
-            @RequestParam("role") Role role,
-            HttpServletRequest request
+            @RequestParam("role") Role role
     ) {
-        creatorService.changeRoleOfUser(id, role, request);
+        creatorService.changeRoleOfUser(id, role);
         return ResponseEntity.ok("Role updated successfully");
     }
 }

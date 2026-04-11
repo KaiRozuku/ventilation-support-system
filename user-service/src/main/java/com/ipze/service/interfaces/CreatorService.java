@@ -3,7 +3,6 @@ package com.ipze.service.interfaces;
 import com.ipze.dto.Role;
 import com.ipze.dto.UserDto;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
@@ -15,11 +14,11 @@ import org.springframework.data.domain.Page;
  */
 public interface CreatorService {
 
-    Page<UserDto> getAllUsers(Pageable pageable, HttpServletRequest httpServletRequest);
+    Page<UserDto> getAllUsers(Pageable pageable);
 
-    Page<UserDto> getUsersByRole(Role role, Pageable pageable, HttpServletRequest httpServletRequest);
+    Page<UserDto> getUsersByRole(Role role, Pageable pageable);
 
-    UserDto getUserByEmail(String email, HttpServletRequest httpServletRequest);
+    UserDto getUserByEmail(String email);
 
-    void changeRoleOfUser(UUID uuid, Role role, HttpServletRequest httpServletRequest);
+    void changeRoleOfUser(UUID uuid, Role role);
 }

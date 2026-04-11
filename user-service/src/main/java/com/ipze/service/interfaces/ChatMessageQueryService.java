@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ChatMessageQueryService {
 
-    List<ChatMessageDto> getHistory(String senderId, String receiverId, HttpServletRequest httpServletRequest);
+    List<ChatMessageDto> getHistory(String senderId, String receiverId);
 
-    List<ChatMessageDto> getRoomMessages(@PathVariable String roomId, HttpServletRequest httpServletRequest);
+    List<ChatMessageDto> getRoomMessages(String roomId);
 
-    List<ChatMessageDto> getIncomingMessages(@PathVariable String userId, HttpServletRequest httpServletRequest);
+    List<ChatMessageDto> getIncomingMessages(String userId);
 }

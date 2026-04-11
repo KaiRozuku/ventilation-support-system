@@ -14,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -37,7 +38,7 @@ public class AuthFilter extends OncePerRequestFilter {
                     .toList();
 
             var authentication = new UsernamePasswordAuthenticationToken(
-                    new ApplicationUserDetails(userId, username, authorities),
+                    new ApplicationUserDetails(UUID.fromString(userId), username, authorities),
                     null,
                     authorities
             );

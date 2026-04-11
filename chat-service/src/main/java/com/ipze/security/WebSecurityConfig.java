@@ -1,11 +1,9 @@
-package com.ipze.config;
+package com.ipze.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,11 +11,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity
-@EnableMethodSecurity
-public class SecurityConfig {
+public class WebSecurityConfig{
 
-    private final UserFilter authUserFilter;
+    private final ChatFilter chatFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -26,12 +22,10 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/user/account/**").authenticated()
-                        .requestMatchers("/user/chat/**").authenticated()
+                        .requestMatchers("/chat/api**").authenticated()
                         .anyRequest().permitAll()
                 )
-                .addFilterBefore(authUserFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(chatFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

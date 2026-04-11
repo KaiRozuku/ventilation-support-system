@@ -3,12 +3,12 @@ package com.ipze.controller;
 import com.ipze.dto.request.ChangeEmailRequest;
 import com.ipze.dto.request.ChangePasswordRequest;
 import com.ipze.dto.request.UpdateUserRequest;
+import com.ipze.security.ApplicationUserDetails;
 import com.ipze.service.UserAccountService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/auth/api/account")
@@ -21,26 +21,26 @@ public class AuthAccountController {
     @PutMapping("/password")
     public ResponseEntity<Void> changePassword(
             @RequestBody ChangePasswordRequest request,
-            @NonNull HttpServletRequest httpServletRequest) {
-        userAccountService.changePassword(request, httpServletRequest);
+            @AuthenticationPrincipal ApplicationUserDetails user) {
+        userAccountService.changePassword(request, user.uuid());
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping
     public ResponseEntity<Void> updateUser(
             @RequestBody UpdateUserRequest request,
-            @NonNull HttpServletRequest httpServletRequest) {
+            @AuthenticationPrincipal ApplicationUserDetails user) {
 
-        userAccountService.updateUser(request, httpServletRequest);
+        userAccountService.updateUser(request, user.uuid());
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/email")
     public ResponseEntity<Void> changeEmail(
             @RequestBody ChangeEmailRequest request,
-            @NonNull HttpServletRequest httpServletRequest) {
+            @AuthenticationPrincipal ApplicationUserDetails user) {
 
-        userAccountService.changeEmail(request, httpServletRequest);
+        userAccountService.changeEmail(request, user.uuid());
         return ResponseEntity.noContent().build();
     }
 }
