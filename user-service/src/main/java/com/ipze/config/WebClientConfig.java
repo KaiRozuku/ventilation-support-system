@@ -25,7 +25,6 @@ public class WebClientConfig {
                     ClientRequest.Builder req = ClientRequest.from(request);
 
                     if (auth != null && auth.getPrincipal() instanceof LocalUserDetails user) {
-                        log.info("TOken: {}", auth.getCredentials());
                         req.header(HttpHeaders.AUTHORIZATION, (String) auth.getCredentials());
                         req.header("X-User-ID", user.uuid());
                         req.header("X-User-Name", user.getUsername());

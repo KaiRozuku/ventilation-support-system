@@ -22,7 +22,7 @@ public class WebSecurityConfig{
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/chat/api**").authenticated()
+                        .requestMatchers("/chat/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(chatFilter, UsernamePasswordAuthenticationFilter.class)

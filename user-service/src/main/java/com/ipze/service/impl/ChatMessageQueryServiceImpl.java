@@ -18,7 +18,7 @@ public class ChatMessageQueryServiceImpl implements ChatMessageQueryService {
     public List<ChatMessageDto> getHistory(String senderId, String receiverId) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<List<ChatMessageDto>>(){},
-                String.format("/chat-service/chat/api/users/%s/messages/%s", senderId, receiverId)
+                String.format("/chat-service/api/messages/%s", receiverId)
         ).block();
     }
 

@@ -1,8 +1,6 @@
 package com.ipze.service.interfaces;
 
 import com.ipze.dto.ChatMessageDto;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 

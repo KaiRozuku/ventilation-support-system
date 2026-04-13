@@ -19,9 +19,9 @@ public class ChatQueryController {
     private final ChatMessageMapper chatMessageMapper;
 
 
-    @GetMapping("/users/{senderId}/messages/{receiverId}")
+    @GetMapping("/messages/{receiverId}")
     public ResponseEntity<List<ChatMessageDto>> messagesFromChat(
-            @PathVariable String senderId,
+            @RequestHeader("X-User-ID") String senderId,
             @PathVariable String receiverId
     ) {
         return ResponseEntity.ok(
@@ -41,14 +41,14 @@ public class ChatQueryController {
                         .toList()
         );
     }
-
-    @GetMapping("/users/{userId}/messages/incoming")
-    public ResponseEntity<List<ChatMessageDto>> getIncomingMessages(@PathVariable String userId) {
-        return ResponseEntity.ok(
-                chatQueryService.getUserIncomingMessages(userId)
-                        .stream()
-                        .map(chatMessageMapper::toDto)
-                        .toList()
-        );
-    }
+//
+//    @GetMapping("/users/{userId}/messages/incoming")
+//    public ResponseEntity<List<ChatMessageDto>> getIncomingMessages(@PathVariable String userId) {
+//        return ResponseEntity.ok(
+//                chatQueryService.getUserIncomingMessages(userId)
+//                        .stream()
+//                        .map(chatMessageMapper::toDto)
+//                        .toList()
+//        );
+//    }
 }
