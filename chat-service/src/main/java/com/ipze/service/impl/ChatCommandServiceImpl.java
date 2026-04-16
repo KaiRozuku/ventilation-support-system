@@ -23,7 +23,8 @@ public class ChatCommandServiceImpl implements ChatCommandService {
         chatMessageRepository.save(chatMessageMapper.toEntity(chatMessageDto));
 
         messagingTemplate.convertAndSend(
-                "/user/" + chatMessageDto.getReceiverId() + "/queue/messages",
+//                "/user/" + chatMessageDto.getReceiverId() + "/queue/messages",
+                null,
                 chatMessageDto
         );
     }

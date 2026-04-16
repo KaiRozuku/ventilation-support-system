@@ -9,6 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -22,7 +23,9 @@ public class OperatorServiceImpl implements OperatorService {
     public Page<Transformer> getAllTransformers(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<Transformer>>() {},
-                "/gf"
+                UriComponentsBuilder
+                        .fromPath("/gf")
+                        .toUriString()
         ).block();
     }
 
@@ -30,7 +33,10 @@ public class OperatorServiceImpl implements OperatorService {
     public Optional<Transformer> getTransformer(UUID uuid) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Optional<Transformer>>() {},
-                "/g" + uuid.toString()
+                UriComponentsBuilder
+                        .fromPath("/g{uuid}")
+                        .buildAndExpand(uuid)
+                        .toUriString()
         ).block();
     }
 
@@ -38,7 +44,10 @@ public class OperatorServiceImpl implements OperatorService {
     public TransformerStatus getTransformerStatus(UUID uuid) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<TransformerStatus>() {},
-                "/fdg" + uuid.toString()
+                UriComponentsBuilder
+                        .fromPath("/fdg{uuid}")
+                        .buildAndExpand(uuid)
+                        .toUriString()
         ).block();
     }
 
@@ -46,7 +55,9 @@ public class OperatorServiceImpl implements OperatorService {
     public Page<Alert> getTransformerAlerts(UUID uuid, Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<Alert>>() {},
-                "/fgf"
+                UriComponentsBuilder
+                        .fromPath("/fgf")
+                        .toUriString()
         ).block();
     }
 
@@ -54,14 +65,19 @@ public class OperatorServiceImpl implements OperatorService {
     public Page<TransformerStatus> getAllTransformersStatus(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<TransformerStatus>>() {},
-                "/dg"
+                UriComponentsBuilder
+                        .fromPath("/dg")
+                        .toUriString()
         ).block();
     }
 
     @Override
     public void addErrorProcessing(UUID uuid) {
         webClientUtils.sendPutRequest(
-                "/dj" + uuid.toString()
+                UriComponentsBuilder
+                        .fromPath("/dj{uuid}")
+                        .buildAndExpand(uuid)
+                        .toUriString()
         ).block();
     }
 }

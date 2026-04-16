@@ -15,6 +15,6 @@ public class RabbitProducerImpl implements RabbitProducer {
 
     @Override
     public void send(ChatMessageDto dto) {
-        rabbitTemplate.convertAndSend("chat.exchange", dto.getReceiverId(), dto);
+        rabbitTemplate.convertAndSend("chat.exchange", dto.getChatId(), dto);
     }
 }

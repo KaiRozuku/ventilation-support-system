@@ -14,6 +14,7 @@ import java.util.UUID;
 
 /**
  * Реалізація інтерфейсу {@link CreatorService}
+ * remove {@code .block();}
  */
 
 @Service

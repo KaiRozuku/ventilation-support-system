@@ -7,6 +7,7 @@ import com.ipze.service.interfaces.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public void changePassword(ChangePasswordRequest request) {
         webClientUtils.sendPutRequest(
-                "/auth-service/api/account/password",
+                UriComponentsBuilder
+                        .fromPath("/auth-service/api/account/password")
+                        .toUriString(),
                 request,
                 new ParameterizedTypeReference<ChangePasswordRequest>() {}
         ).block();
@@ -27,7 +30,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public void updateUser(UpdateUserRequest request) {
         webClientUtils.sendPutRequest(
-                "/auth-service/api/account",
+                UriComponentsBuilder
+                        .fromPath("/auth-service/api/account")
+                        .toUriString(),
                 request,
                 new ParameterizedTypeReference<Void>() {}
         ).block();
@@ -36,7 +41,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public void changeEmail(ChangeEmailRequest request) {
         webClientUtils.sendPutRequest(
-                "/auth-service/api/account/email",
+                UriComponentsBuilder
+                        .fromPath("/auth-service/api/account/email")
+                        .toUriString(),
                 request,
                 new ParameterizedTypeReference<Void>() {}
         ).block();
@@ -45,7 +52,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public void logout() {
         webClientUtils.sendPutRequest(
-                "/auth-service/auth/logout"
+                UriComponentsBuilder
+                        .fromPath("/auth-service/auth/logout")
+                        .toUriString()
         ).block();
     }
 }

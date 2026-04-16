@@ -8,6 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -23,7 +24,10 @@ public class DataAnalystServiceImpl implements DataAnalystService {
                                                    Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Optional<Transformer>>() {},
-                "/de?uuid=" + uuid.toString()
+                UriComponentsBuilder
+                        .fromPath("/de?uuid=")
+                        .buildAndExpand(uuid)
+                        .toUriString()
         ).block();
     }
 
@@ -31,7 +35,9 @@ public class DataAnalystServiceImpl implements DataAnalystService {
     public Page<Transformer> exportAllTransformers(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<Transformer>>() {},
-                "/ded"
+                UriComponentsBuilder
+                        .fromPath("/ded")
+                        .toUriString()
         ).block();
     }
 
@@ -39,7 +45,9 @@ public class DataAnalystServiceImpl implements DataAnalystService {
     public Page<Alert> getAllErrors(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<Alert>>() {},
-                "/ss"
+                UriComponentsBuilder
+                        .fromPath("/ss")
+                        .toUriString()
         ).block();
     }
 
@@ -47,7 +55,9 @@ public class DataAnalystServiceImpl implements DataAnalystService {
     public Page<Alert> getCriticalAlerts(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<Alert>>() {},
-                "/aw"
+                UriComponentsBuilder
+                        .fromPath("/aw")
+                        .toUriString()
         ).block();
     }
 
@@ -55,7 +65,9 @@ public class DataAnalystServiceImpl implements DataAnalystService {
     public Page<String> exportTransformerLogs(UUID uuid, Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<Page<String>>() {},
-                "/ff"
+                UriComponentsBuilder
+                        .fromPath("/ff")
+                        .toUriString()
         ).block();
     }
 }

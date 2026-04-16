@@ -40,9 +40,9 @@ public class AuthCreatorServiceImpl implements AuthCreatorService {
 
     @Transactional
     public void changeRoleOfUser(UUID uuid, Role role) {
-        User user = userRepository
+        userRepository
                 .findById(uuid)
-                .orElseThrow(UserNotFoundException::new);
-        user.setRole(role);
+                .orElseThrow(UserNotFoundException::new)
+                .setRole(role);
     }
 }

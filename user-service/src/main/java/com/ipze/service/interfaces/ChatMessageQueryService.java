@@ -1,6 +1,7 @@
 package com.ipze.service.interfaces;
 
-import com.ipze.dto.ChatMessageDto;
+
+import com.ipze.dto.response.ChatMessageDto;
 
 import java.util.List;
 

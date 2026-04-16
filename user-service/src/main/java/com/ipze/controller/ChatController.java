@@ -1,7 +1,6 @@
 package com.ipze.controller;
 
-import com.ipze.dto.ChatMessageDto;
-import com.ipze.dto.MessageType;
+import com.ipze.dto.response.ChatMessageDto;
 import com.ipze.service.interfaces.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +21,14 @@ public class ChatController {
     @PostMapping("/send")
     public ResponseEntity<?> sendMessage(@RequestParam String content,
                             @RequestParam String senderId,
-                            @RequestParam String receiverId) {
+                            @RequestParam String chatId) {
 
         ChatMessageDto dto = ChatMessageDto.builder()
                 .id(UUID.randomUUID().toString())
                 .content(content)
                 .senderId(senderId)
-                .receiverId(receiverId)
-                .roomId(UUID.randomUUID().toString())
+                .chatId(chatId)
                 .timestamp(LocalDateTime.now())
-                .messageType(MessageType.CHAT)
                 .build();
 
         chatMessageService.sendToUser(dto);

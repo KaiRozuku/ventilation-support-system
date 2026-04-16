@@ -1,6 +1,6 @@
 package com.ipze.service.impl;
 
-import com.ipze.dto.ChatMessageDto;
+import com.ipze.dto.response.ChatMessageDto;
 import com.ipze.service.interfaces.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,7 +16,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public void sendToUser(ChatMessageDto chatMessageDto) {
         rabbitTemplate.convertAndSend(
                 "chat.user.exchange",
-                chatMessageDto.getReceiverId(),
+//                chatMessageDto.getReceiverId(),
                 chatMessageDto
         );
     }

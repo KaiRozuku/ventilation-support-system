@@ -1,13 +1,17 @@
 package com.ipze.service.impl;
 
-import com.ipze.dto.ChatMessageDto;
+import com.ipze.dto.response.ChatMessageDto;
 import com.ipze.service.interfaces.ChatMessageQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
+/**
+ * change {@code .fromPath} to real URI's
+ */
 @Service
 @RequiredArgsConstructor
 public class ChatMessageQueryServiceImpl implements ChatMessageQueryService {
@@ -17,8 +21,11 @@ public class ChatMessageQueryServiceImpl implements ChatMessageQueryService {
     @Override
     public List<ChatMessageDto> getHistory(String senderId, String receiverId) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<List<ChatMessageDto>>(){},
-                String.format("/chat-service/api/messages/%s", receiverId)
+                new ParameterizedTypeReference<List<ChatMessageDto>>() {},
+                UriComponentsBuilder
+                        .fromPath("/chat-service/api/messages/{receiverId}")
+                        .buildAndExpand(receiverId)
+                        .toUriString()
         ).block();
     }
 
@@ -26,7 +33,10 @@ public class ChatMessageQueryServiceImpl implements ChatMessageQueryService {
     public List<ChatMessageDto> getRoomMessages(String roomId) {
         return webClientUtils.sendGetRequest(
                         new ParameterizedTypeReference<List<ChatMessageDto>>() {},
-                        String.format("/rooms/%s/messages", roomId)
+                        UriComponentsBuilder
+                                .fromPath("/rooms/{roomId}/messages")
+                                .buildAndExpand(roomId)
+                                .toUriString()
                 )
                 .block();
     }
@@ -35,7 +45,10 @@ public class ChatMessageQueryServiceImpl implements ChatMessageQueryService {
     public List<ChatMessageDto> getIncomingMessages(String userId) {
         return webClientUtils.sendGetRequest(
                         new ParameterizedTypeReference<List<ChatMessageDto>>() {},
-                        String.format("/users/%s/messages/incoming", userId))
+                        UriComponentsBuilder
+                                .fromPath("/users/{userId}/messages/incoming")
+                                .buildAndExpand(userId)
+                                .toUriString())
                 .block();
     }
 }

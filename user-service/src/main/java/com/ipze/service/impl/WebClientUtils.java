@@ -7,9 +7,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+/**
+ * switch {@code String uri} to {@code URI uri}
+ */
+
 @Component
 @RequiredArgsConstructor
-class WebClientUtils{
+class WebClientUtils {
 
     private final WebClient webClient;
 
@@ -44,8 +48,8 @@ class WebClientUtils{
                 .bodyToMono(responseType);
     }
 
-    public <T> Mono<T> sendGetRequest(ParameterizedTypeReference<T> type,
-                                      String uri) {
+    <T> Mono<T> sendGetRequest(ParameterizedTypeReference<T> type,
+                               String uri) {
         return webClient.get()
                 .uri(uri)
                 .retrieve()

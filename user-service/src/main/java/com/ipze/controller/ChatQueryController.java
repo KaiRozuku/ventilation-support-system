@@ -1,8 +1,8 @@
 package com.ipze.controller;
 
 
-import com.ipze.dto.ChatMessageDto;
 import com.ipze.dto.request.ChatHistoryRequest;
+import com.ipze.dto.response.ChatMessageDto;
 import com.ipze.service.interfaces.ChatMessageQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +23,7 @@ public class ChatQueryController {
     @GetMapping("/history")
     public ResponseEntity<List<ChatMessageDto>> getHistory(@RequestBody ChatHistoryRequest request,
                                                            @RequestHeader("X-User-ID") String senderId
-
     ) {
-
         return ResponseEntity.ok(
                 chatMessageQueryService.getHistory(
                         senderId,

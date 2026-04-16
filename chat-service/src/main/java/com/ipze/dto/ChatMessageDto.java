@@ -1,5 +1,6 @@
 package com.ipze.dto;
 
+import com.ipze.entity.MessageStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,18 +15,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ChatMessageDto implements Serializable {
-
     private String id;
+
+    private String chatId;
+
+    private String senderId;
 
     private String content;
 
     private LocalDateTime timestamp;
 
-    private String roomId;
-
-    private String senderId;
-
-    private String receiverId;
-
-    private MessageType messageType;
+    private MessageStatus status;
 }

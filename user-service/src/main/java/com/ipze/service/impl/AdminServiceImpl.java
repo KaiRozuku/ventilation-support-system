@@ -9,6 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -20,7 +21,10 @@ public class AdminServiceImpl implements AdminService {
     private final WebClientUtils webClientUtils;
 
     public Mono<Void> createTransformer(TransformerRequest request) {
-        return webClientUtils.sendPostRequest("/rt",
+        return webClientUtils.sendPostRequest(
+                UriComponentsBuilder
+                        .fromPath("/rt")
+                        .toUriString(),
                 request,
                 new ParameterizedTypeReference<>(){}
         );
@@ -28,7 +32,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Mono<Void> updateTransformer(TransformerRequest request) {
-        return webClientUtils.sendPutRequest("/dd",
+        return webClientUtils.sendPutRequest(
+                UriComponentsBuilder
+                        .fromPath("/dd")
+                        .toUriString(),
                 request,
                 new ParameterizedTypeReference<>() {}
                 );
@@ -37,7 +44,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Mono<Transformer> exportTransformer(UUID uuid) {
         return webClientUtils.sendGetRequest(new ParameterizedTypeReference<>(){},
-                "/export?uuid=" + uuid.toString()
+                UriComponentsBuilder
+                        .fromPath("/export?uuid={uuid}")
+                        .buildAndExpand(uuid)
+                        .toUriString()
         );
     }
 
@@ -45,7 +55,9 @@ public class AdminServiceImpl implements AdminService {
     public Mono<Page<Transformer>> exportAllTransformers(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<>() {},
-                "/fd"
+                UriComponentsBuilder
+                        .fromPath("/fd")
+                        .toUriString()
                 );
     }
 
@@ -53,7 +65,9 @@ public class AdminServiceImpl implements AdminService {
     public Mono<Page<Alert>> getAllErrors(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<>() {},
-                "/all"
+                UriComponentsBuilder
+                        .fromPath("/65fd")
+                        .toUriString()
                 );
     }
 
@@ -61,14 +75,20 @@ public class AdminServiceImpl implements AdminService {
     public Mono<Page<Alert>> getCriticalAlerts(Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<>() {},
-                "/fgd");
+                UriComponentsBuilder
+                        .fromPath("/fdy")
+                        .toUriString()
+        );
     }
 
     @Override
     public Mono<Page<String>> exportTransformerLogs(UUID uuid, Pageable pageable) {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<>() {},
-                "/fdg" + uuid.toString()
+                UriComponentsBuilder
+                        .fromPath("/fdg{uuid}")
+                        .buildAndExpand(uuid)
+                        .toUriString()
                 );
     }
 }

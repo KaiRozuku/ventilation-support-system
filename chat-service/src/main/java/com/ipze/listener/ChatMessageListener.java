@@ -19,6 +19,6 @@ public class ChatMessageListener {
 
         chatCommandService.processIncomingMessage(message);
 
-        log.info("Message from {} to {} delivered", message.getSenderId(), message.getReceiverId());
+//        log.info("Message from {} to {} delivered", message.getSenderId(), message.getReceiverId());
     }
 }
