@@ -23,7 +23,7 @@ public class ChatRoom {
 
     private List<String> participantIds;
 
-    ChatType chatType;
+    private ChatType chatType;
 
     private String name;
 

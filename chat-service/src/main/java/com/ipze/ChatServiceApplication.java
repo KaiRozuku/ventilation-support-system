@@ -14,6 +14,7 @@ public class ChatServiceApplication {
 
         System.setProperty("RABBIT_HOST", dotenv.get("RABBIT_HOST"));
         System.setProperty("RABBIT_PORT", dotenv.get("RABBIT_PORT"));
+        System.setProperty("RABBIT_STOMP_PORT", dotenv.get("RABBIT_STOMP_PORT"));
         System.setProperty("RABBIT_USERNAME", dotenv.get("RABBIT_USERNAME"));
         System.setProperty("RABBIT_PASSWORD", dotenv.get("RABBIT_PASSWORD"));
         System.setProperty("MONGO_URI", dotenv.get("MONGO_URI"));

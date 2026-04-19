@@ -9,6 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig{
@@ -22,10 +23,12 @@ public class WebSecurityConfig{
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/chat/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(chatFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+
     }
 }

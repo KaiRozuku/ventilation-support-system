@@ -1,19 +1,17 @@
 package com.ipze.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.config.annotation.*;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 
 @Configuration
 @EnableWebSocketMessageBroker
-@EnableConfigurationProperties(RabbitProperties.class)
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-    private final RabbitProperties rabbitProperties;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -25,10 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
-        registry.enableStompBrokerRelay("/topic", "/queue")
-                .setRelayHost(rabbitProperties.host())
-                .setRelayPort(rabbitProperties.port())
-                .setClientLogin(rabbitProperties.username())
-                .setClientPasscode(rabbitProperties.password());
+        registry.enableSimpleBroker("/topic", "/queue");
+        registry.setUserDestinationPrefix("/user");
     }
 }

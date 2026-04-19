@@ -12,7 +12,7 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessage, Stri
 
     List<ChatMessage> findByChatIdOrderByTimestampAsc(String chatId);
 
-    List<ChatMessage> findByChatIdAndSenderIdNotAndStatus(
+    List<ChatMessage> findByChatIdAndSenderIdNotAndStatusOrderByTimestamp(
             String chatId,
             String senderId,
             MessageStatus status

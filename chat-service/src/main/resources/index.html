@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+
+<input id="chatId" placeholder="chatId"/>
+<input id="userId" placeholder="userId"/>
+<input id="message" placeholder="message"/>
+
+<button onclick="send()">Send</button>
+
+<ul id="messages"></ul>
+
+<script>
+
+    let stompClient = null;
+    let sub = null;
+
+    // DEBUG (важливо)
+    function debug(str) {
+        console.log("STOMP:", str);
+    }
+
+    function connect() {
+        const socket = new SockJS("http://localhost:8082/ws");
+        stompClient = Stomp.over(socket);
+
+        stompClient.debug = debug;
+
+        stompClient.connect({}, () => {
+            console.log("✅ connected");
+        });
+    }
+
+    // авто connect
+    connect();
+
+    // subscribe при зміні chatId
+    document.getElementById("chatId").addEventListener("change", () => {
+
+        const chatId = document.getElementById("chatId").value;
+
+        if (!chatId) return;
+
+        if (sub) sub.unsubscribe();
+
+        sub = stompClient.subscribe("/topic/chat/" + chatId, msg => {
+            const m = JSON.parse(msg.body);
+
+            const li = document.createElement("li");
+            li.innerText = m.senderId + ": " + m.content;
+
+            document.getElementById("messages").appendChild(li);
+        });
+
+        console.log("SUBSCRIBED:", chatId);
+    });
+
+    function send() {
+
+        const chatId = document.getElementById("chatId").value;
+        const userId = document.getElementById("userId").value;
+        const message = document.getElementById("message").value;
+
+        stompClient.send("/app/chat.send", {}, JSON.stringify({
+            chatId: chatId,
+            senderId: userId,
+            content: message
+        }));
+    }
+
+</script>
+
+</body>
+</html>

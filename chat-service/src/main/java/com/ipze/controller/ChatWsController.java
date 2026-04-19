@@ -1,27 +1,26 @@
 package com.ipze.controller;
 
-import com.ipze.entity.ChatMessage;
-import com.ipze.service.impl.ChatMessageService;
+import com.ipze.dto.ChatMessageDto;
+import com.ipze.service.interfaces.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-
 @Controller
 @RequiredArgsConstructor
 public class ChatWsController {
 
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatMessageService chatMessageService;
-    private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/chat.send")
-    public void sendMessage(ChatMessage message) {
+    public void sendMessage(ChatMessageDto message) {
 
-        ChatMessage saved = chatMessageService.save(message);
+        ChatMessageDto saved = chatMessageService.saveMessage(message);
 
-        messagingTemplate.convertAndSend(
-                "/topic/chats/" + message.getChatId(),
+        simpMessagingTemplate.convertAndSend(
+                "/topic/chat/" + saved.getChatId(),
                 saved
         );
     }

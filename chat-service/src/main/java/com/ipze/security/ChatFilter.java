@@ -23,6 +23,13 @@ public class ChatFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        if (path.startsWith("/ws")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String username = request.getHeader("X-User-Name");
         String userId = request.getHeader("X-User-ID");
         String rolesHeader = request.getHeader("X-User-Roles");

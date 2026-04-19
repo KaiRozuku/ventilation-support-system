@@ -23,6 +23,9 @@ public class RouteConfiguration {
                 .route(createRoute("auth-service", "/auth-service", authFilter))
                 .route(createRoute("chat-service", "/chat-service", authFilter))
                 .route(createRoute("user-service", "/user-service", authFilter))
+                .route("chat-ws", r -> r
+                        .path("/ws/**")
+                        .uri("lb:ws://chat-service"))
                 .build();
     }
 

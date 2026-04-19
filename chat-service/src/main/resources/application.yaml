@@ -6,11 +6,12 @@ spring:
   application:
     name: chat-service
 
-  rabbitmq:
-    host: ${RABBIT_HOST}
-    port: ${RABBIT_PORT}
-    username: ${RABBIT_USERNAME}
-    password: ${RABBIT_PASSWORD}
+#  rabbitmq:
+#    host: ${RABBIT_HOST}
+#    port: ${RABBIT_PORT}
+#    username: ${RABBIT_USERNAME}
+#    password: ${RABBIT_PASSWORD}
+#    stomp-port: ${RABBIT_STOMP_PORT}
 
   data:
     mongodb:

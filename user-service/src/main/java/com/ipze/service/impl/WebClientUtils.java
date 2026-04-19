@@ -13,11 +13,11 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-class WebClientUtils {
+public class WebClientUtils {
 
     private final WebClient webClient;
 
-    <T, R> Mono<R> sendPutRequest(
+    public <T, R> Mono<R> sendPutRequest(
             @NonNull String uri,
             @NonNull T body,
             @NonNull ParameterizedTypeReference<R> responseType
@@ -29,14 +29,14 @@ class WebClientUtils {
                 .bodyToMono(responseType);
     }
 
-    Mono<Void> sendPutRequest(@NonNull String uri) {
+    public Mono<Void> sendPutRequest(@NonNull String uri) {
         return webClient.put()
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(Void.class);
     }
 
-    <T, R> Mono<R> sendPostRequest(
+    public <T, R> Mono<R> sendPostRequest(
             @NonNull String uri,
             @NonNull T body,
             @NonNull ParameterizedTypeReference<R> responseType
@@ -48,8 +48,10 @@ class WebClientUtils {
                 .bodyToMono(responseType);
     }
 
-    <T> Mono<T> sendGetRequest(ParameterizedTypeReference<T> type,
-                               String uri) {
+    public <T> Mono<T> sendGetRequest(
+            @NonNull ParameterizedTypeReference<T> type,
+            @NonNull String uri
+    ) {
         return webClient.get()
                 .uri(uri)
                 .retrieve()

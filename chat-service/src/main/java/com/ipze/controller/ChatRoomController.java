@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * chat-service
+ * Add CRUD in the future
  */
 @RestController
 @RequestMapping("/chat/api")
@@ -53,7 +54,6 @@ public class ChatRoomController {
         );
     }
 
-    // CREATE group
     @PostMapping("/groups")
     public ResponseEntity<ChatRoomDto> createGroup(
             @RequestBody CreateGroupRequest request,
@@ -62,7 +62,7 @@ public class ChatRoomController {
         return ResponseEntity.ok(
                 chatRoomService.createGroup(
                         request.users(),
-                        request.name(),
+                        request.groupName(),
                         creator.uuid()
                 )
         );

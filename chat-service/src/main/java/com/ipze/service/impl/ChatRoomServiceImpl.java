@@ -57,6 +57,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         return chatRoomMapper.toDto(chatRoomRepository.save(chat));
     }
 
+    @Override
     public ChatRoomDto createGroup(List<String> users, String name, String creator) {
 
         return chatRoomMapper.toDto(
@@ -92,10 +93,13 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .toString();
     }
 
+    @Override
     public List<ChatRoomDto> getUserPrivateChats(String userId) {
         return getChatsByType(userId, ChatType.PRIVATE);
 
     }
+
+    @Override
     public List<ChatRoomDto> getUserGroups(String userId) {
         return getChatsByType(userId, ChatType.GROUP);
     }
