@@ -4,23 +4,23 @@ package com.ipze.service.interfaces;
 import com.ipze.dto.Alert;
 import com.ipze.dto.Transformer;
 import com.ipze.dto.TransformerStatus;
-import org.springframework.data.domain.Page;
+import com.ipze.dto.response.PageResponse;
 import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Mono;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface OperatorService {
 
-    Page<Transformer> getAllTransformers(Pageable pageable);
+    Mono<PageResponse<Transformer>> getAllTransformers(Pageable pageable);
 
-    Optional<Transformer> getTransformer(UUID uuid);
+    Mono<Transformer> getTransformer(UUID uuid);
 
-    TransformerStatus getTransformerStatus(UUID uuid);
+    Mono<TransformerStatus> getTransformerStatus(UUID uuid);
 
-    Page<Alert> getTransformerAlerts(UUID uuid, Pageable pageable);
+    Mono<PageResponse<Alert>> getTransformerAlerts(UUID uuid, Pageable pageable);
 
-    Page<TransformerStatus> getAllTransformersStatus(Pageable pageable);
+    Mono<PageResponse<TransformerStatus>> getAllTransformersStatus(Pageable pageable);
 
-    void addErrorProcessing(UUID uuid);
+    Mono<Void> addErrorProcessing(UUID uuid);
 }

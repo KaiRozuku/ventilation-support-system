@@ -1,12 +1,22 @@
 from fastapi import APIRouter
 
-from app.models.request_model import DecisionRequest
-from app.services.ai_analytic import get_decision
+router = APIRouter(
+    prefix="/users",
+    tags=["Users"]
+)
+# router = APIRouter(prefix="/decisions", tags=["Decisions"])
 
-router = APIRouter()
+
+@router.get("/")
+def get_users() -> list[dict]:
+    return [{"username": "Rick"}, {"username": "Morty"}]
 
 
-@router.post("/decision")
-def decision(request: DecisionRequest):
-    result = get_decision(request)
-    return {"decision": result}
+@router.get("/me")
+def get_current_user() -> dict:
+    return {"username": "Rick", "role": "admin"}
+
+
+@router.get("/")
+def get_decisions() -> list[dict]:
+    return [{"id": 1, "status": "active"}]

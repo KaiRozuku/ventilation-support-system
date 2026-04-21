@@ -1,9 +1,11 @@
 package com.ipze.entity;
 
+import com.ipze.enums.MessageStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,6 +29,7 @@ public class ChatMessage {
 
     private String content;
 
+    @CreatedDate
     private LocalDateTime timestamp;
 
     private MessageStatus status;

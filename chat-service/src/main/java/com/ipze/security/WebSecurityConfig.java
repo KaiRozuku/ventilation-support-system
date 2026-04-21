@@ -25,6 +25,7 @@ public class WebSecurityConfig{
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/chat/api/**").authenticated()
+//                        .requestMatchers("/chat/api/")
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(chatFilter, UsernamePasswordAuthenticationFilter.class)

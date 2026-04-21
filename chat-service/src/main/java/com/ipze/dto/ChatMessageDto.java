@@ -1,6 +1,6 @@
 package com.ipze.dto;
 
-import com.ipze.entity.MessageStatus;
+import com.ipze.enums.MessageStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

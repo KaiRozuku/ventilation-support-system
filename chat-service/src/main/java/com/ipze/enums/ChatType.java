@@ -1,4 +1,4 @@
-package com.ipze.dto;
+package com.ipze.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

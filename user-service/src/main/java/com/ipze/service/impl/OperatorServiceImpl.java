@@ -3,15 +3,15 @@ package com.ipze.service.impl;
 import com.ipze.dto.Alert;
 import com.ipze.dto.Transformer;
 import com.ipze.dto.TransformerStatus;
+import com.ipze.dto.response.PageResponse;
 import com.ipze.service.interfaces.OperatorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Mono;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,64 +20,69 @@ public class OperatorServiceImpl implements OperatorService {
     private final WebClientUtils webClientUtils;
 
     @Override
-    public Page<Transformer> getAllTransformers(Pageable pageable) {
+    public Mono<PageResponse<Transformer>> getAllTransformers(Pageable pageable) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<Page<Transformer>>() {},
+                new ParameterizedTypeReference<>() {
+                },
                 UriComponentsBuilder
                         .fromPath("/gf")
                         .toUriString()
-        ).block();
+        );
     }
 
     @Override
-    public Optional<Transformer> getTransformer(UUID uuid) {
+    public Mono<Transformer> getTransformer(UUID uuid) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<Optional<Transformer>>() {},
+                new ParameterizedTypeReference<>() {
+                },
                 UriComponentsBuilder
                         .fromPath("/g{uuid}")
                         .buildAndExpand(uuid)
                         .toUriString()
-        ).block();
+        );
     }
 
     @Override
-    public TransformerStatus getTransformerStatus(UUID uuid) {
+    public Mono<TransformerStatus> getTransformerStatus(UUID uuid) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<TransformerStatus>() {},
+                new ParameterizedTypeReference<>() {
+                },
                 UriComponentsBuilder
                         .fromPath("/fdg{uuid}")
                         .buildAndExpand(uuid)
                         .toUriString()
-        ).block();
+        );
     }
 
     @Override
-    public Page<Alert> getTransformerAlerts(UUID uuid, Pageable pageable) {
+    public Mono<PageResponse<Alert>> getTransformerAlerts(UUID uuid, Pageable pageable) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<Page<Alert>>() {},
+                new ParameterizedTypeReference<>() {
+                },
                 UriComponentsBuilder
                         .fromPath("/fgf")
                         .toUriString()
-        ).block();
+        );
     }
 
     @Override
-    public Page<TransformerStatus> getAllTransformersStatus(Pageable pageable) {
+    public Mono<PageResponse<TransformerStatus>> getAllTransformersStatus(Pageable pageable) {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<Page<TransformerStatus>>() {},
+                new ParameterizedTypeReference<>() {
+                },
                 UriComponentsBuilder
                         .fromPath("/dg")
                         .toUriString()
-        ).block();
+        );
     }
 
     @Override
-    public void addErrorProcessing(UUID uuid) {
-        webClientUtils.sendPutRequest(
+    public Mono<Void> addErrorProcessing(UUID uuid) {
+        return webClientUtils.sendPutRequest(
                 UriComponentsBuilder
                         .fromPath("/dj{uuid}")
                         .buildAndExpand(uuid)
                         .toUriString()
-        ).block();
+        );
     }
 }

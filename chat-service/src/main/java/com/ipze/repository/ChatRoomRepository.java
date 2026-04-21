@@ -1,9 +1,10 @@
 package com.ipze.repository;
 
-import com.ipze.dto.ChatType;
+
 import com.ipze.entity.ChatRoom;
+import com.ipze.enums.ChatType;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.lang.NonNull;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,10 +13,20 @@ import java.util.Optional;
 @Repository
 public interface ChatRoomRepository extends MongoRepository<ChatRoom, String> {
 
-    @NonNull
-    Optional<ChatRoom> findById(@NonNull String id);
+    List<ChatRoom> findByParticipantsUserId(String userId);
 
-    boolean existsByIdAndParticipantIdsContains(String chatId, String userId);
+    List<ChatRoom> findByChatType(ChatType type);
 
-    List<ChatRoom> findByParticipantIdsContainsAndChatType(String userId, ChatType chatType);
+    @Query("""
+        
+            {
+          'chatType': 'PRIVATE',
+          'participants.userId': { $all: [?0, ?1] }
+        }
+        """)
+    Optional<ChatRoom> findPrivateChat(String senderId, String receiverId);
+
+    Optional<ChatRoom> findByIdAndParticipantsUserId(String chatId, String userId);
+
+    boolean existsByIdAndParticipantsUserId(String chatId, String userId);
 }

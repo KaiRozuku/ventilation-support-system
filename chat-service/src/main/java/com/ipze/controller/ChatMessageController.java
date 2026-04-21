@@ -6,34 +6,53 @@ import com.ipze.service.interfaces.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Add CRUD in the future
- */
 @RestController
-@RequestMapping("chat/api")
+@RequestMapping("/chat/api/{chatId}")
 @RequiredArgsConstructor
 public class ChatMessageController {
 
-    private final ChatMessageService chatMessageService;
+    private final ChatMessageService service;
 
-    @GetMapping("/chats/{chatId}")
-    public ResponseEntity<List<ChatMessageDto>> getMessagesFromChats(
+    @GetMapping
+    public ResponseEntity<List<ChatMessageDto>> getMessages(
             @PathVariable String chatId,
-            @AuthenticationPrincipal LocalUserDetails user) {
-        return ResponseEntity.ok(chatMessageService.getMessages(chatId, user.uuid()));
+            @AuthenticationPrincipal LocalUserDetails user
+    ) {
+        return ResponseEntity.ok(
+                service.getMessagesOrderByTimestampAsc(chatId, user.uuid())
+        );
     }
 
-    @GetMapping("/groups/{groupId}")
-    public ResponseEntity<List<ChatMessageDto>> getMessagesFromGroups(
-            @PathVariable String groupId,
-            @AuthenticationPrincipal LocalUserDetails user) {
-        return ResponseEntity.ok(chatMessageService.getMessages(groupId, user.uuid()));
+    @GetMapping("/unread")
+    public ResponseEntity<List<ChatMessageDto>> getUnread(
+            @PathVariable String chatId,
+            @AuthenticationPrincipal LocalUserDetails user
+    ) {
+        return ResponseEntity.ok(
+                service.getUnreadMessages(chatId, user.uuid())
+        );
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ChatMessageDto>> search(
+            @PathVariable String chatId,
+            @RequestParam String keyword
+    ) {
+        return ResponseEntity.ok(
+                service.searchMessages(chatId, keyword)
+        );
+    }
+
+    @GetMapping("/last")
+    public ResponseEntity<ChatMessageDto> getLast(
+            @PathVariable String chatId
+    ) {
+        return ResponseEntity.ok(
+                service.getLastMessage(chatId)
+        );
     }
 }

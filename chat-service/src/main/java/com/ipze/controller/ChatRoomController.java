@@ -2,29 +2,27 @@ package com.ipze.controller;
 
 import com.ipze.dto.ChatRoomDto;
 import com.ipze.dto.request.CreateGroupRequest;
-import com.ipze.dto.request.CreateRoomRequest;
+import com.ipze.dto.request.CreatePrivateRoomRequest;
 import com.ipze.security.LocalUserDetails;
 import com.ipze.service.interfaces.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * chat-service
- * Add CRUD in the future
- */
 @RestController
 @RequestMapping("/chat/api")
 @RequiredArgsConstructor
+@PreAuthorize("@chatSecurityService.isParticipant(#chatId, authentication.name)")
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
-    @GetMapping("/chats")
-    public ResponseEntity<List<ChatRoomDto>> getUserChats(
+    @GetMapping("/private")
+    public ResponseEntity<List<ChatRoomDto>> getUserPrivateChats(
             @AuthenticationPrincipal LocalUserDetails user
     ) {
         return ResponseEntity.ok(
@@ -32,15 +30,15 @@ public class ChatRoomController {
         );
     }
 
-    @PostMapping("/chats")
-    public ResponseEntity<ChatRoomDto> getOrCreateChatRoom(
+    @PostMapping("/private")
+    public ResponseEntity<ChatRoomDto> getOrCreatePrivateChat(
             @AuthenticationPrincipal LocalUserDetails sender,
-            @RequestBody CreateRoomRequest createRoomRequest
-            ) {
+            @RequestBody CreatePrivateRoomRequest request
+    ) {
         return ResponseEntity.ok(
                 chatRoomService.getOrCreatePrivateChat(
                         sender.uuid(),
-                        createRoomRequest.receiver()
+                        request.receiver()
                 )
         );
     }
@@ -56,8 +54,8 @@ public class ChatRoomController {
 
     @PostMapping("/groups")
     public ResponseEntity<ChatRoomDto> createGroup(
-            @RequestBody CreateGroupRequest request,
-            @AuthenticationPrincipal LocalUserDetails creator
+            @AuthenticationPrincipal LocalUserDetails creator,
+            @RequestBody CreateGroupRequest request
     ) {
         return ResponseEntity.ok(
                 chatRoomService.createGroup(
@@ -66,5 +64,24 @@ public class ChatRoomController {
                         creator.uuid()
                 )
         );
+    }
+
+    @GetMapping("/{chatId}")
+    public ResponseEntity<ChatRoomDto> getChat(
+            @AuthenticationPrincipal LocalUserDetails user,
+            @PathVariable String chatId
+    ) {
+        return ResponseEntity.ok(
+                chatRoomService.getChatRoom(chatId, user.uuid())
+        );
+    }
+
+    @DeleteMapping("/{chatId}")
+    public ResponseEntity<Void> deleteChat(
+            @PathVariable String chatId,
+            @AuthenticationPrincipal LocalUserDetails user
+    ) {
+        chatRoomService.deleteChat(chatId, user.uuid());
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,10 +1,11 @@
+import uvicorn
 from fastapi import FastAPI
-from app.routes.decision import router
 
-app = FastAPI(title="AI Decision Microservice")
+from app.routes import decision
 
-app.include_router(router, prefix="/api")
+app = FastAPI(title="My Architecture App")
+app.include_router(decision.router)
 
-@app.get("/health")
-def health():
-    return {"status": "OK"}
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8085, reload=True)

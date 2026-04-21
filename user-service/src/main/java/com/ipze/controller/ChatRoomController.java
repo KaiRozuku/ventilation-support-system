@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -22,23 +23,29 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
-    @GetMapping("/chats")
-    public ResponseEntity<List<ChatRoomDto>> getUserChats(){
-        return ResponseEntity.ok(chatRoomService.getUserChats());
+    @GetMapping("/private")
+    public Mono<ResponseEntity<List<ChatRoomDto>>> getUserChats(){
+        return (chatRoomService.getUserPrivateChats())
+                .map(ResponseEntity::ok);
     }
 
-    @PostMapping("/chats")
-    public ResponseEntity<ChatRoomDto> getOrCreateChatRoom(@RequestBody CreateRoomRequest createRoomRequest){
-        return ResponseEntity.ok(chatRoomService.getOrCreateChatRoom(createRoomRequest));
+    @PostMapping("/private")
+    public Mono<ResponseEntity<ChatRoomDto>>
+    getOrCreateChatRoom(@RequestBody CreateRoomRequest createRoomRequest){
+        return (chatRoomService.getOrCreatePrivateChatRoom(createRoomRequest))
+                .map(ResponseEntity::ok);
     }
 
     @GetMapping("/groups")
-    public ResponseEntity<List<ChatRoomDto>> getUserGroups(){
-        return ResponseEntity.ok(chatRoomService.getUserGroups());
+    public Mono<ResponseEntity<List<ChatRoomDto>>> getUserGroups(){
+        return (chatRoomService.getUserGroups())
+                .map(ResponseEntity::ok);
     }
 
     @PostMapping("/groups")
-    public ResponseEntity<ChatRoomDto> createGroup(@RequestBody CreateGroupRequest createGroupRequest){
-        return ResponseEntity.ok(chatRoomService.createGroup(createGroupRequest));
+    public Mono<ResponseEntity<ChatRoomDto>>
+    createGroup(@RequestBody CreateGroupRequest createGroupRequest){
+        return (chatRoomService.createGroup(createGroupRequest))
+                .map(ResponseEntity::ok);
     }
 }

@@ -8,6 +8,4 @@ import org.mapstruct.Mapper;
 public interface ChatRoomMapper {
 
     ChatRoomDto toDto(ChatRoom chatRoom);
-
-    ChatRoom toEntity(ChatRoomDto chatRoomDto);
 }

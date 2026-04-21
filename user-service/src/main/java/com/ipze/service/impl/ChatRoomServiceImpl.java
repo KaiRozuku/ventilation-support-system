@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -22,47 +23,45 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final WebClientUtils webClientUtils;
 
     @Override
-    public List<ChatRoomDto> getUserChats() {
+    public Mono<List<ChatRoomDto>> getUserPrivateChats() {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<List<ChatRoomDto>>() {},
+                new ParameterizedTypeReference<>() {},
                 UriComponentsBuilder
-                        .fromPath("/chat-service/api/chats")
+                        .fromPath("/chat-service/api/private")
                         .toUriString()
-                ).block();
+                );
     }
     @Override
-    public List<ChatRoomDto> getUserGroups() {
+    public Mono<List<ChatRoomDto>> getUserGroups() {
         return webClientUtils.sendGetRequest(
-                new ParameterizedTypeReference<List<ChatRoomDto>>() {},
+                new ParameterizedTypeReference<>() {},
                 UriComponentsBuilder
                         .fromPath("/chat-service/api/groups")
                         .toUriString()
-                ).block();
+                );
     }
 
     @Override
-    public ChatRoomDto getOrCreateChatRoom(CreateRoomRequest createRoomRequest) {
+    public Mono<ChatRoomDto> getOrCreatePrivateChatRoom(CreateRoomRequest createRoomRequest) {
         return webClientUtils.sendPostRequest(
                         UriComponentsBuilder
-                                .fromPath("/chat-service/api/chats")
+                                .fromPath("/chat-service/api/private")
                                 .toUriString(),
                         createRoomRequest,
-                        new ParameterizedTypeReference<ChatRoomDto>() {
+                        new ParameterizedTypeReference<>() {
                         }
-                )
-                .block();
+                );
     }
 
     @Override
-    public ChatRoomDto createGroup(CreateGroupRequest createGroupRequest) {
+    public Mono<ChatRoomDto> createGroup(CreateGroupRequest createGroupRequest) {
         return webClientUtils.sendPostRequest(
                         UriComponentsBuilder
                                 .fromPath("/chat-service/api/groups")
                                 .toUriString(),
                         createGroupRequest,
-                        new ParameterizedTypeReference<ChatRoomDto>() {
+                        new ParameterizedTypeReference<>() {
                         }
-                )
-                .block();
+                );
     }
 }

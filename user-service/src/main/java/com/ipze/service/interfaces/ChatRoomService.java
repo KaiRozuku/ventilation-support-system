@@ -3,6 +3,7 @@ package com.ipze.service.interfaces;
 import com.ipze.dto.ChatRoomDto;
 import com.ipze.dto.request.CreateGroupRequest;
 import com.ipze.dto.request.CreateRoomRequest;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -12,11 +13,11 @@ import java.util.List;
  */
 public interface ChatRoomService {
 
-    List<ChatRoomDto> getUserChats();
+    Mono<List<ChatRoomDto>> getUserPrivateChats();
 
-    ChatRoomDto getOrCreateChatRoom(CreateRoomRequest createRoomRequest);
+    Mono<ChatRoomDto> getOrCreatePrivateChatRoom(CreateRoomRequest createRoomRequest);
 
-    ChatRoomDto createGroup(CreateGroupRequest createGroupRequest);
+    Mono<ChatRoomDto> createGroup(CreateGroupRequest createGroupRequest);
 
-    List<ChatRoomDto> getUserGroups();
+    Mono<List<ChatRoomDto>> getUserGroups();
 }

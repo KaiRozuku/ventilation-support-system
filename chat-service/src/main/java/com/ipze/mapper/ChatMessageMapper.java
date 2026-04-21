@@ -9,6 +9,4 @@ import org.mapstruct.Mapper;
 public interface ChatMessageMapper {
 
     ChatMessageDto toDto(ChatMessage chatMessage);
-
-    ChatMessage toEntity(ChatMessageDto chatMessageDto);
 }
