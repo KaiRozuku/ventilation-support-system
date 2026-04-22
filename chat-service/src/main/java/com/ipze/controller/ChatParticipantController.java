@@ -8,24 +8,23 @@ import com.ipze.service.interfaces.ChatParticipantStateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @RestController
-@RequestMapping("chat/api/{chatId}/participants")
+@RequestMapping("/chat/api/{chatId}/participants")
 @RequiredArgsConstructor
-@EnableMethodSecurity
 public class ChatParticipantController {
 
     private final ChatParticipantQueryService chatParticipantQueryService;
     private final ChatParticipantStateService chatParticipantStateService;
     private final ChatParticipantManagementService chatParticipantManagementService;
 
-    @PreAuthorize("@chatSecurityService.isChatAdmin(#chatId, authentication.name)")
     @PostMapping
+    @PreAuthorize("@chatSecurityService.isChatAdmin(#chatId, authentication.principal.uuid)")
     public ResponseEntity<ChatParticipantDto> addParticipant(
             @PathVariable String chatId,
             @RequestParam String userId,
@@ -36,8 +35,8 @@ public class ChatParticipantController {
         );
     }
 
-    @PreAuthorize("@chatSecurityService.isChatAdmin(#chatId, authentication.name)")
     @DeleteMapping("/{userId}")
+    @PreAuthorize("@chatSecurityService.isChatAdmin(#chatId, authentication.principal.uuid)")
     public ResponseEntity<Void> removeParticipant(
             @PathVariable String chatId,
             @PathVariable String userId
@@ -46,7 +45,8 @@ public class ChatParticipantController {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("@chatSecurityService.isParticipant(#chatId, authentication.name)")    @GetMapping
+    @GetMapping
+    @PreAuthorize("@chatSecurityService.isParticipant(#chatId, authentication.principal.uuid)")
     public ResponseEntity<List<ChatParticipantDto>> getParticipants(
             @PathVariable String chatId
     ) {
@@ -55,7 +55,8 @@ public class ChatParticipantController {
         );
     }
 
-    @PreAuthorize("@chatSecurityService.isParticipant(#chatId, authentication.name)")    @GetMapping("/{userId}")
+    @GetMapping("/{userId}")
+    @PreAuthorize("@chatSecurityService.isParticipant(#chatId, authentication.principal.uuid)")
     public ResponseEntity<ChatParticipantDto> getParticipant(
             @PathVariable String chatId,
             @PathVariable String userId
@@ -65,8 +66,8 @@ public class ChatParticipantController {
         );
     }
 
-    @PreAuthorize("@chatSecurityService.isChatAdmin(#chatId, authentication.name)")
     @PutMapping("/{userId}/role")
+    @PreAuthorize("@chatSecurityService.isChatAdmin(#chatId, authentication.principal.uuid)")
     public ResponseEntity<ChatParticipantDto> updateRole(
             @PathVariable String chatId,
             @PathVariable String userId,
@@ -77,8 +78,8 @@ public class ChatParticipantController {
         );
     }
 
-    @PreAuthorize("@chatSecurityService.isChatAdmin(#chatId, authentication.name)")
     @PutMapping("/{userId}/mute")
+    @PreAuthorize("@chatSecurityService.isChatAdmin(#chatId, authentication.principal.uuid)")
     public ResponseEntity<ChatParticipantDto> muteParticipant(
             @PathVariable String chatId,
             @PathVariable String userId,
@@ -89,7 +90,11 @@ public class ChatParticipantController {
         );
     }
 
-    @PreAuthorize("@chatSecurityService.isParticipant(#chatId, authentication.name)")    @PutMapping("/{userId}/read")
+    @PutMapping("/{userId}/read")
+    @PreAuthorize(
+            "#userId == authentication.principal.uuid or " +
+                    "@chatSecurityService.isChatAdmin(#chatId, authentication.principal.uuid)"
+    )
     public ResponseEntity<ChatParticipantDto> updateLastRead(
             @PathVariable String chatId,
             @PathVariable String userId

@@ -40,4 +40,11 @@ public record LocalUserDetails(String uuid, String username, Collection<? extend
     public boolean isEnabled() {
         return true;
     }
+
+    public String getRole(){
+        return authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .reduce((a, b) -> a + "," + b)
+                .orElse("");
+    }
 }

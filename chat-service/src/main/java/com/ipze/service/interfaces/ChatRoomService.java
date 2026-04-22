@@ -1,6 +1,7 @@
 package com.ipze.service.interfaces;
 
 import com.ipze.dto.ChatRoomDto;
+
 import java.util.List;
 
 public interface ChatRoomService {

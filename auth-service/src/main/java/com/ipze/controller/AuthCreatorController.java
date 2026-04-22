@@ -39,4 +39,13 @@ public class AuthCreatorController {
         creatorService.changeRoleOfUser(id, role);
         return ResponseEntity.ok("Role updated successfully");
     }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<Void> existByUuid(@PathVariable String id) {
+        boolean exists = creatorService.existByUuid(id);
+
+        return exists
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.notFound().build();
+    }
 }

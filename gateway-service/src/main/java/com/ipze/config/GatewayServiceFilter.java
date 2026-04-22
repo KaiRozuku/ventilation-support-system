@@ -68,6 +68,7 @@ public class GatewayServiceFilter implements GatewayFilter {
             return sendResponse(exchange, HttpStatus.UNAUTHORIZED);
         } catch (JwtException e) {
             log.error("Invalid JWT: {}", e.getMessage());
+            log.error("token -> {}", authHeader);
             return sendResponse(exchange, HttpStatus.FORBIDDEN);
         }
     }

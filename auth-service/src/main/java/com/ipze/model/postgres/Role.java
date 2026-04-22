@@ -5,5 +5,6 @@ public enum Role {
     OPERATOR,
     DATA_ANALYST,
     CREATOR,
-    UNDEFINED
+    UNDEFINED,
+    SYSTEM
 }

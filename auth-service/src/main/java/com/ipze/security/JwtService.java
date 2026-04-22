@@ -48,6 +48,18 @@ public class JwtService {
                 refreshTokenTtl
         );
     }
+
+    public String generateSystemToken(String serviceName) {
+        return generateToken(
+                serviceName,
+                Map.of(
+                        "type", Role.SYSTEM.name(),
+                        "roles", Role.SYSTEM.name()
+                ),
+                accessTokenTtl
+        );
+    }
+
     private Claims extractFromToken(String token){
     return Jwts.parser()
             .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))

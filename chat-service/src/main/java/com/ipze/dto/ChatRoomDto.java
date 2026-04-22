@@ -7,7 +7,7 @@ import java.util.List;
 
 public record ChatRoomDto (
         String id,
-        List<ChatParticipantDto> participantIds,
+        List<ChatParticipantDto> participants,
         ChatType chatType,
         String name,
         String createdBy,

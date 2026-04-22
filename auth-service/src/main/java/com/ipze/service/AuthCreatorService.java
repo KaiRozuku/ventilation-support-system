@@ -16,4 +16,7 @@ public interface AuthCreatorService {
     User getUserByEmail(String email);
 
     void changeRoleOfUser(UUID uuid, Role role);
+
+    boolean existByUuid(String uuid);
+
 }

@@ -45,4 +45,9 @@ public class AuthCreatorServiceImpl implements AuthCreatorService {
                 .orElseThrow(UserNotFoundException::new)
                 .setRole(role);
     }
+
+    @Override
+    public boolean existByUuid (String uuid) {
+        return userRepository.existsByUserID(UUID.fromString(uuid));
+    }
 }

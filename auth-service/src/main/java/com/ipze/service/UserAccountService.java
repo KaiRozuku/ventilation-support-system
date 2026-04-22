@@ -3,7 +3,6 @@ package com.ipze.service;
 import com.ipze.dto.request.ChangeEmailRequest;
 import com.ipze.dto.request.ChangePasswordRequest;
 import com.ipze.dto.request.UpdateUserRequest;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.UUID;
 
