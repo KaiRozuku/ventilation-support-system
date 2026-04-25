@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * change {@code .fromPath} to real URI's
- * user-service
+ * user-services
  */
 @Service
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<>() {},
                 UriComponentsBuilder
-                        .fromPath("/chat-service/api/private")
+                        .fromPath("/chat-services/api/private")
                         .toUriString()
                 );
     }
@@ -36,7 +36,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         return webClientUtils.sendGetRequest(
                 new ParameterizedTypeReference<>() {},
                 UriComponentsBuilder
-                        .fromPath("/chat-service/api/groups")
+                        .fromPath("/chat-services/api/groups")
                         .toUriString()
                 );
     }
@@ -45,7 +45,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public Mono<ChatRoomDto> getOrCreatePrivateChatRoom(CreateRoomRequest createRoomRequest) {
         return webClientUtils.sendPostRequest(
                         UriComponentsBuilder
-                                .fromPath("/chat-service/api/private")
+                                .fromPath("/chat-services/api/private")
                                 .toUriString(),
                         createRoomRequest,
                         new ParameterizedTypeReference<>() {
@@ -57,7 +57,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public Mono<ChatRoomDto> createGroup(CreateGroupRequest createGroupRequest) {
         return webClientUtils.sendPostRequest(
                         UriComponentsBuilder
-                                .fromPath("/chat-service/api/groups")
+                                .fromPath("/chat-services/api/groups")
                                 .toUriString(),
                         createGroupRequest,
                         new ParameterizedTypeReference<>() {

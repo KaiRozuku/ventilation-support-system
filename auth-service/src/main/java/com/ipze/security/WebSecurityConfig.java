@@ -42,7 +42,7 @@ public class WebSecurityConfig{
                         .requestMatchers("/auth/login", "/auth/register", "/auth/refreshToken").permitAll()
                         .requestMatchers("/auth/logout").authenticated()
                         .requestMatchers("/auth/api/account/**").authenticated()
-                        .requestMatchers("/auth/api/creator/**").hasAuthority(Role.CREATOR.name())
+                        .requestMatchers("/auth/api/system/**").hasAuthority(Role.SYSTEM.name())
                         .anyRequest().permitAll())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

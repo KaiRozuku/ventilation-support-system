@@ -53,7 +53,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             throw new IllegalArgumentException("Cannot create chat with yourself");
         }
         log.info("receiverId -> {}", receiverId);
-        if (!webClientService.validateUserExists(receiverId)) {
+        if (webClientService.userExists(receiverId)) {
             throw new ParticipantNotFoundException();
         }
 
@@ -109,7 +109,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         uniqueUsers.add(creatorId);
 
         List<String> invalidUsers = uniqueUsers.stream()
-                .filter(x -> !webClientService.validateUserExists(x))
+                .filter(webClientService::userExists)
                 .toList();
 
         if (!invalidUsers.isEmpty()) {

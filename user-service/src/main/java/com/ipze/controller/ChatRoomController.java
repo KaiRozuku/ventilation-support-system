@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 /**
- * user-service
+ * user-services
  */
 @RestController
 @RequiredArgsConstructor

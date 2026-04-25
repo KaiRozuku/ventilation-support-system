@@ -4,7 +4,7 @@
 //import com.ipze.dto1.TransformerDto;
 //import com.ipze.mapper.AlertMapper;
 //import com.ipze.mapper.TransformerMapper;
-//import com.ipze.service.interfaces.OperatorService;
+//import com.ipze.services.interfaces.OperatorService;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;

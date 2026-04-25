@@ -15,7 +15,7 @@
 	<groupId>com.ipze</groupId>
 	<artifactId>gateway-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gateway-service</name>
+	<name>gateway-services</name>
 
 	<properties>
 		<maven.compiler.source>21</maven.compiler.source>

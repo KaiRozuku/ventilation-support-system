@@ -20,7 +20,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     public Mono<Void> changePassword(ChangePasswordRequest request) {
         return webClientUtils.sendPutRequest(
                 UriComponentsBuilder
-                        .fromPath("/auth-service/api/account/password")
+                        .fromPath("/auth-services/api/account/password")
                         .toUriString(),
                 request,
                 new ParameterizedTypeReference<>() {}
@@ -31,7 +31,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     public Mono<Void> updateUser(UpdateUserRequest request) {
         return webClientUtils.sendPutRequest(
                 UriComponentsBuilder
-                        .fromPath("/auth-service/api/account")
+                        .fromPath("/auth-services/api/account")
                         .toUriString(),
                 request,
                 new ParameterizedTypeReference<>() {}
@@ -42,7 +42,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     public Mono<Void> changeEmail(ChangeEmailRequest request) {
         return webClientUtils.sendPutRequest(
                 UriComponentsBuilder
-                        .fromPath("/auth-service/api/account/email")
+                        .fromPath("/auth-services/api/account/email")
                         .toUriString(),
                 request,
                 new ParameterizedTypeReference<>() {}
@@ -53,7 +53,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     public Mono<Void> logout() {
         return webClientUtils.sendPutRequest(
                 UriComponentsBuilder
-                        .fromPath("/auth-service/auth/logout")
+                        .fromPath("/auth-services/auth/logout")
                         .toUriString()
         );
     }

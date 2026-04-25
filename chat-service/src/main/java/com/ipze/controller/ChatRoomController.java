@@ -57,14 +57,14 @@ public class ChatRoomController {
 
     @PostMapping("/groups")
     public ResponseEntity<ChatRoomDto> createGroup(
-            @AuthenticationPrincipal LocalUserDetails creator,
+            @AuthenticationPrincipal LocalUserDetails system,
             @RequestBody CreateGroupRequest request
     ) {
         return ResponseEntity.ok(
                 chatRoomService.createGroup(
                         request.users(),
                         request.groupName(),
-                        creator.uuid()
+                        system.uuid()
                 )
         );
     }

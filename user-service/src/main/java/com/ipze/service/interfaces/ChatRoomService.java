@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * change signature of getUserGroups method
- * user-service
+ * user-services
  */
 public interface ChatRoomService {
 

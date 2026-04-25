@@ -20,12 +20,12 @@ public class RouteConfiguration {
                                GatewayFilter authFilter) {
 
         return builder.routes()
-                .route(createRoute("auth-service", "/auth-service", authFilter))
-                .route(createRoute("chat-service", "/chat-service", authFilter))
-                .route(createRoute("user-service", "/user-service", authFilter))
+                .route(createRoute("auth-services", "/auth-services", authFilter))
+                .route(createRoute("chat-services", "/chat-services", authFilter))
+                .route(createRoute("user-services", "/user-services", authFilter))
                 .route("chat-ws", r -> r
                         .path("/ws/**")
-                        .uri("lb:ws://chat-service"))
+                        .uri("lb:ws://chat-services"))
                 .build();
     }
 
@@ -34,7 +34,7 @@ public class RouteConfiguration {
         return r -> r.path(pathPrefix + "/**")
                 .filters(f -> f
                         .rewritePath(pathPrefix + "/(?<segment>.*)", "/"
-                                + serviceName.replace("-service", "") + "/${segment}")
+                                + serviceName.replace("-services", "") + "/${segment}")
                         .filter(filter))
                 .uri("lb://" + serviceName);
     }
