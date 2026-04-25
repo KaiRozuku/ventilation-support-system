@@ -17,15 +17,16 @@ public class RouteConfiguration {
 
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder,
-                               GatewayFilter authFilter) {
+                               GatewayFilter gatewayFilter) {
 
         return builder.routes()
-                .route(createRoute("auth-services", "/auth-services", authFilter))
-                .route(createRoute("chat-services", "/chat-services", authFilter))
-                .route(createRoute("user-services", "/user-services", authFilter))
+                .route(createRoute("auth-service", "/auth-service", gatewayFilter))
+                .route(createRoute("chat-service", "/chat-service", gatewayFilter))
+                .route(createRoute("user-service", "/user-service", gatewayFilter))
+                .route(createRoute("data-service", "/data-service", gatewayFilter))
                 .route("chat-ws", r -> r
                         .path("/ws/**")
-                        .uri("lb:ws://chat-services"))
+                        .uri("lb:ws://chat-service"))
                 .build();
     }
 
@@ -34,7 +35,7 @@ public class RouteConfiguration {
         return r -> r.path(pathPrefix + "/**")
                 .filters(f -> f
                         .rewritePath(pathPrefix + "/(?<segment>.*)", "/"
-                                + serviceName.replace("-services", "") + "/${segment}")
+                                + serviceName.replace("-service", "") + "/${segment}")
                         .filter(filter))
                 .uri("lb://" + serviceName);
     }
