@@ -12,16 +12,8 @@ from sklearn.metrics import (
 from sklearn.preprocessing import LabelEncoder
 from xgboost import XGBClassifier
 
-# ============================================
-# 1. LOAD DATA
-# ============================================
 
-BASE_DIR = Path(__file__).resolve()
-PROJECT_ROOT = BASE_DIR.parents[2]
-
-DS = PROJECT_ROOT / "resources"
-
-FILE = DS / "synthetic_radionuclide_data52.csv"
+FILE = Path(__file__).resolve().parents[2] / "resources" / "synthetic_radionuclide_data.csv"
 
 df = pd.read_csv(FILE, engine="python")
 
