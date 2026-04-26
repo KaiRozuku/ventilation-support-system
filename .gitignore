@@ -15,6 +15,19 @@ target/
 
 **/.env
 **/.sql
+/data-service/resources/
+# Python virtual env (CRITICAL)
+data-service/Lib/
+data-service/Scripts/
+data-service/Include/
+data-service/pyvenv.cfg
+
+data-service/.venv/
+data-service/venv/
+
+# Python cache
+__pycache__/
+*.pyc
 
 ### IntelliJ IDEA ###
 .idea
