@@ -3,7 +3,6 @@ package com.ipze.entity;
 import com.ipze.enums.ParticipantRole;
 import com.ipze.enums.ParticipantStatus;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,28 +13,24 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "chat_participant")
+@Document("chat_participants")
 public class ChatParticipant {
 
     @Id
     private String id;
 
     private String chatId;
-
     private String userId;
 
     private ParticipantRole role;
 
-    @CreatedDate
+    private ParticipantStatus status;
+
     private LocalDateTime joinedAt;
 
     private LocalDateTime lastReadAt;
-
-    private ParticipantStatus status;
-
-    private LocalDateTime leftAt;
-
     private LocalDateTime removedAt;
+    private LocalDateTime leftAt;
 
     private boolean muted;
 }

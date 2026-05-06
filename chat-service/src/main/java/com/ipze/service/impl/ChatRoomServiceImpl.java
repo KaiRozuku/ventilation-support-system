@@ -1,180 +1,256 @@
 package com.ipze.service.impl;
 
-import com.ipze.dto.ChatRoomDto;
+import com.ipze.dto.*;
 import com.ipze.entity.ChatParticipant;
 import com.ipze.entity.ChatRoom;
 import com.ipze.enums.ChatType;
 import com.ipze.enums.ParticipantRole;
+import com.ipze.enums.ParticipantStatus;
 import com.ipze.exceptions.ChatNotFoundException;
 import com.ipze.exceptions.ParticipantNotFoundException;
-import com.ipze.mapper.ChatRoomMapper;
 import com.ipze.repository.ChatParticipantRepository;
 import com.ipze.repository.ChatRoomRepository;
 import com.ipze.service.WebClientService;
 import com.ipze.service.interfaces.ChatRoomService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomMapper chatRoomMapper;
-    private final WebClientService webClientService;
     private final ChatParticipantRepository chatParticipantRepository;
+    private final WebClientService webClientService;
 
     @Override
-    public List<ChatRoomDto> getUserPrivateChats(String userId) {
-
-        return chatRoomRepository.findByParticipantsUserId(userId)
-                .stream()
-                .filter(chat -> chat.getChatType() == ChatType.PRIVATE)
-                .map(chatRoomMapper::toDto)
-                .toList();
-    }
-
-    @Override
-    public ChatRoomDto getOrCreatePrivateChat(String senderId, String receiverId) {
-
-
-        if (senderId.equals(receiverId)) {
-            throw new IllegalArgumentException("Cannot create chat with yourself");
-        }
-        log.info("receiverId -> {}", receiverId);
-        if (webClientService.userExists(receiverId)) {
-            throw new ParticipantNotFoundException();
-        }
-
-        return chatRoomRepository.findPrivateChat(senderId, receiverId)
-                .map(chatRoomMapper::toDto)
-                .orElseGet(() -> {
-
-                    String chatId = generateChatId(senderId, receiverId);
-
-                    return chatRoomMapper.toDto(
-                            chatRoomRepository.save(
-                            ChatRoom.builder()
-                                    .chatType(ChatType.PRIVATE)
-                                    .id(chatId)
-                                    .createdBy(senderId)
-                                    .createdAt(LocalDateTime.now())
-                                    .participants(
-                                            chatParticipantRepository.saveAll(List.of(
-                                                    ChatParticipant.builder()
-                                                            .chatId(chatId)
-                                                            .userId(senderId)
-                                                            .build(),
-                                                    ChatParticipant.builder()
-                                                            .chatId(chatId)
-                                                            .userId(receiverId)
-                                                            .build()
-                                            ))
-                                    )
-                                    .build()
-                        )
-                    );
-                });
-    }
-
-    @Override
-    public List<ChatRoomDto> getUserGroups(String userId) {
-        return chatRoomRepository.findByChatType(ChatType.GROUP)
-                .stream()
-                .filter(chat -> chat.getParticipants().stream()
-                        .anyMatch(p -> p.getUserId().equals(userId)))
-                .map(chatRoomMapper::toDto)
-                .toList();
-    }
-
-    @Override
+    @Transactional
     public ChatRoomDto createGroup(List<String> users, String name, String creatorId) {
 
         if (users == null || users.isEmpty()) {
-            throw new IllegalArgumentException("Group must have at least one participant");
+            throw new IllegalArgumentException("Group must have participants");
         }
 
         Set<String> uniqueUsers = new LinkedHashSet<>(users);
         uniqueUsers.add(creatorId);
 
-        List<String> invalidUsers = uniqueUsers.stream()
-                .filter(webClientService::userExists)
-                .toList();
+        List<UserShortDto> existingUsers =
+                webClientService.getUsers(new ArrayList<>(uniqueUsers));
 
-        if (!invalidUsers.isEmpty()) {
-            throw new IllegalArgumentException("Some users do not exist: " + invalidUsers);
+        if (existingUsers.size() != uniqueUsers.size()) {
+            throw new ParticipantNotFoundException();
         }
 
         String chatId = UUID.randomUUID().toString();
         LocalDateTime now = LocalDateTime.now();
 
-        ChatRoom chatRoom = ChatRoom.builder()
-                .id(chatId)
-                .chatType(ChatType.GROUP)
-                .name(name)
-                .createdBy(creatorId)
-                .createdAt(now)
-                .participants(
-                        chatParticipantRepository.saveAll(
-                        uniqueUsers.stream()
-                                .map(userId -> ChatParticipant.builder()
-                                        .chatId(chatId)
-                                        .userId(userId)
-                                        .joinedAt(now)
-                                        .role(userId.equals(creatorId)
-                                                ? ParticipantRole.ADMIN
-                                                : ParticipantRole.MEMBER)
-                                        .build()
-                                )
-                                .toList()
-                ))
-                .build();
+        ChatRoom chatRoom = chatRoomRepository.save(
+                ChatRoom.builder()
+                        .id(chatId)
+                        .name(name)
+                        .chatType(ChatType.GROUP)
+                        .createdBy(creatorId)
+                        .createdAt(now)
+                        .build()
+        );
 
-        return chatRoomMapper.toDto(chatRoomRepository.save(chatRoom));
+        List<ChatParticipant> participants = uniqueUsers.stream()
+                .map(userId -> ChatParticipant.builder()
+                        .chatId(chatId)
+                        .userId(userId)
+                        .role(userId.equals(creatorId)
+                                ? ParticipantRole.ADMIN
+                                : ParticipantRole.MEMBER)
+                        .status(ParticipantStatus.ACTIVE)
+                        .joinedAt(now)
+                        .muted(false)
+                        .build()
+                )
+                .toList();
+
+        chatParticipantRepository.saveAll(participants);
+        chatRoomRepository.save(chatRoom);
+        return buildChatRoomDto(chatRoom, participants);
     }
 
     @Override
     public ChatRoomDto getChatRoom(String chatId, String userId) {
-        return chatRoomMapper.toDto(getChatRoomOrThrow(chatId, userId));
-    }
 
-    private ChatRoom getChatRoomOrThrow(String chatId, String userId) {
-        return chatRoomRepository.findByIdAndParticipantsUserId(chatId, userId)
+        if (!chatParticipantRepository.existsByChatIdAndUserId(chatId, userId)) {
+            throw new ChatNotFoundException();
+        }
+
+        ChatRoom chatRoom = chatRoomRepository.findById(chatId)
                 .orElseThrow(ChatNotFoundException::new);
+
+        List<ChatParticipant> participants =
+                chatParticipantRepository.findByChatId(chatId);
+
+        return buildChatRoomDto(chatRoom, participants);
     }
 
     @Override
+    @Transactional
     public void deleteChat(String chatId, String userId) {
-        ChatRoom chat = getChatRoomOrThrow(chatId, userId);
 
-        if (!chat.getCreatedBy().equals(userId)) {
-            throw new AccessDeniedException("Only owner can delete chat");
+        ChatParticipant participant = chatParticipantRepository
+                .findByChatIdAndUserId(chatId, userId)
+                .orElseThrow(ChatNotFoundException::new);
+
+        if (participant.getRole() != ParticipantRole.ADMIN) {
+            throw new IllegalStateException("Only admin can delete chat");
         }
 
-        chatRoomRepository.delete(chat);
+        chatParticipantRepository.deleteAll(
+                chatParticipantRepository.findByChatId(chatId)
+        );
+
+        chatRoomRepository.deleteById(chatId);
     }
 
-    private String generateChatId(String u1, String u2) {
+    @Override
+    public ChatRoomDto getOrCreatePrivateChat(String senderId, String receiverId) {
 
-        String user1 = u1.trim().toLowerCase();
-        String user2 = u2.trim().toLowerCase();
+        if (senderId.equals(receiverId)) {
+            throw new IllegalArgumentException("Cannot chat with yourself");
+        }
 
-        String raw = user1.compareTo(user2) > 0
-                ? user2 + "_" + user1
-                : user1 + "_" + user2;
+        List<UserShortDto> users =
+                webClientService.getUsers(List.of(receiverId));
 
-        return UUID.nameUUIDFromBytes(raw.getBytes(StandardCharsets.UTF_8))
-                .toString();
+        if (users.isEmpty()) {
+            throw new ParticipantNotFoundException();
+        }
+
+        String chatId = generatePrivateChatId(senderId, receiverId);
+
+        Optional<ChatRoom> existing = chatRoomRepository.findById(chatId);
+
+        if (existing.isPresent()) {
+            List<ChatParticipant> participants =
+                    chatParticipantRepository.findByChatId(chatId);
+
+            return buildChatRoomDto(existing.get(), participants);
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        ChatRoom chatRoom = chatRoomRepository.save(
+                ChatRoom.builder()
+                        .id(chatId)
+                        .chatType(ChatType.PRIVATE)
+                        .createdBy(senderId)
+                        .createdAt(now)
+                        .build()
+        );
+
+        List<ChatParticipant> participants = List.of(
+                ChatParticipant.builder()
+                        .chatId(chatId)
+                        .userId(senderId)
+                        .role(ParticipantRole.ADMIN)
+                        .joinedAt(now)
+                        .build(),
+                ChatParticipant.builder()
+                        .chatId(chatId)
+                        .userId(receiverId)
+                        .role(ParticipantRole.ADMIN)
+                        .joinedAt(now)
+                        .build()
+        );
+
+        chatParticipantRepository.saveAll(participants);
+        chatRoomRepository.save(chatRoom);
+
+        return buildChatRoomDto(chatRoom, participants);
+    }
+
+    @Override
+    public List<ChatRoomDto> getUserPrivateChats(String userId) {
+
+        List<String> chatIds = chatParticipantRepository.findByUserId(userId)
+                .stream()
+                .map(ChatParticipant::getChatId)
+                .toList();
+
+        return chatRoomRepository.findAllById(chatIds)
+                .stream()
+                .filter(chat -> chat.getChatType() == ChatType.PRIVATE)
+                .map(chat -> buildChatRoomDto(
+                        chat,
+                        chatParticipantRepository.findByChatId(chat.getId())
+                ))
+                .toList();
+    }
+
+    @Override
+    public List<ChatRoomDto> getUserGroups(String userId) {
+
+        List<String> chatIds = chatParticipantRepository.findByUserId(userId)
+                .stream()
+                .map(ChatParticipant::getChatId)
+                .toList();
+
+        return chatRoomRepository.findAllById(chatIds)
+                .stream()
+                .filter(chat -> chat.getChatType() == ChatType.GROUP)
+                .map(chat -> buildChatRoomDto(
+                        chat,
+                        chatParticipantRepository.findByChatId(chat.getId())
+                ))
+                .toList();
+    }
+
+    private ChatRoomDto buildChatRoomDto(ChatRoom chatRoom,
+                                         List<ChatParticipant> participants) {
+
+        List<String> userIds = participants.stream()
+                .map(ChatParticipant::getUserId)
+                .toList();
+
+        Map<String, UserShortDto> users = webClientService.getUsers(userIds)
+                .stream()
+                .collect(Collectors.toMap(k -> k.userId().toString(), u -> u));
+
+        List<ChatParticipantDto> participantDtos = participants.stream()
+                .map(p -> {
+                    UserShortDto user = users.get(p.getUserId());
+
+                    return new ChatParticipantDto(
+                            p.getUserId(),
+                            user != null ? user.username() : "unknown",
+                            user != null ? user.email() : null,
+                            user != null ? user.avatarUrl() : null,
+                            p.getRole(),
+                            p.getJoinedAt()
+                    );
+                })
+                .toList();
+
+        return new ChatRoomDto(
+                chatRoom.getId(),
+                chatRoom.getName(),
+                chatRoom.getChatType(),
+                chatRoom.getCreatedBy(),
+                chatRoom.getCreatedAt(),
+                participants.stream().map(ChatParticipant::getUserId).toList(),
+                participantDtos
+        );
+    }
+
+    private String generatePrivateChatId(String u1, String u2) {
+        return UUID.nameUUIDFromBytes(
+                Stream.of(u1.trim().toLowerCase(), u2.trim().toLowerCase())
+                        .sorted()
+                        .collect(Collectors.joining("_"))
+                        .getBytes(StandardCharsets.UTF_8)
+        ).toString();
     }
 }

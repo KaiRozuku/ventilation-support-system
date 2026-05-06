@@ -12,7 +12,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
@@ -36,9 +35,11 @@ public class GatewayServiceFilter implements GatewayFilter {
                 .anyMatch(pattern -> new AntPathMatcher().match(pattern, path))) {
             return chain.filter(exchange);
         }
-
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        log.info("RAW AUTH HEADER: [{}]", authHeader);
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.warn("incorrect {}", authHeader);
             return sendResponse(exchange, HttpStatus.UNAUTHORIZED);
         }
 
@@ -54,13 +55,7 @@ public class GatewayServiceFilter implements GatewayFilter {
                 return sendResponse(exchange, HttpStatus.UNAUTHORIZED);
             }
 
-            ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                    .header("X-User-Name", claims.getSubject())
-                    .header("X-User-ID", claims.get("userId", String.class))
-                    .header("X-User-Roles", claims.get("roles", String.class))
-                    .build();
-
-            return chain.filter(exchange.mutate().request(mutatedRequest).build());
+            return chain.filter(exchange);
 
         } catch (ExpiredJwtException e) {
             log.warn("JWT expired: {}", e.getMessage());

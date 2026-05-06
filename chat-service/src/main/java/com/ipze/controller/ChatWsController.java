@@ -2,11 +2,12 @@ package com.ipze.controller;
 
 import com.ipze.dto.ChatMessageDto;
 import com.ipze.dto.request.*;
-import com.ipze.service.interfaces.ChatMessageService;
-import com.ipze.service.interfaces.ChatParticipantManagementService;
+import com.ipze.security.LocalUserDetails;
+import com.ipze.security.WsAuthentication;
+import com.ipze.service.interfaces.ChatMessageWsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -15,77 +16,53 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class ChatWsController {
 
-    private final SimpMessagingTemplate messagingTemplate;
-    private final ChatMessageService chatMessageService;
-    private final ChatParticipantManagementService chatParticipantManagementService;
+    private final ChatMessageWsService chatMessageWsService;
+
 
     @MessageMapping("/chat.send")
     public void send(SendMessageRequest request, Principal principal) {
 
-        ChatMessageDto saved = chatMessageService.sendMessage(
-                request,
-                principal.getName()
-        );
+        LocalUserDetails user = extract(principal);
 
-        messagingTemplate.convertAndSend(
-                "/topic/chat/" + saved.getChatId(),
-                saved
-        );
+        chatMessageWsService.processMessage(request, user.uuid());
     }
 
     @MessageMapping("/chat.update")
     public void update(UpdateMessageRequest request, Principal principal) {
 
-        ChatMessageDto updated = chatMessageService.updateMessage(
-                request.messageId(),
-                principal.getName(),
-                request.content()
-        );
+        LocalUserDetails user = extract(principal);
 
-        messagingTemplate.convertAndSend(
-                "/topic/chat/" + updated.getChatId(),
-                updated
-        );
+        chatMessageWsService.update(request, user.uuid());
     }
 
     @MessageMapping("/chat.delete")
     public void delete(DeleteMessageRequest request, Principal principal) {
 
-        ChatMessageDto deleted = chatMessageService.deleteMessage(
-                request.messageId(),
-                principal.getName()
-        );
+        LocalUserDetails user = extract(principal);
 
-        messagingTemplate.convertAndSend(
-                "/topic/chat/" + deleted.getChatId(),
-                deleted
-        );
+        chatMessageWsService.delete(request, user.uuid());
     }
 
     @MessageMapping("/chat.read")
-    public void read(ChatMessageDto chatMessageDto, Principal principal) {
+    public void read(ChatMessageDto request, Principal principal) {
 
-        ChatMessageDto updated = chatMessageService.markAsRead(
-                chatMessageDto,
-                principal.getName()
-        );
+        LocalUserDetails user = extract(principal);
 
-        messagingTemplate.convertAndSend(
-                "/topic/chat/" + chatMessageDto.getChatId() + "/read",
-                updated
-        );
+        chatMessageWsService.markAsRead(request, user.uuid());
     }
 
     @MessageMapping("/chat.leave")
-    public void leaveChat(ChatActionRequest request, Principal principal) {
+    public void leave(ChatActionRequest request, Principal principal) {
 
-        String userId = principal.getName();
+        LocalUserDetails user = extract(principal);
 
-        chatParticipantManagementService.leaveChat(request.chatId(), userId);
+        chatMessageWsService.leave(request, user.uuid());
+    }
 
-        messagingTemplate.convertAndSend(
-                "/topic/chat/" + request.chatId(),
-                new ChatEventDto("USER_LEFT", userId)
-        );
+    private LocalUserDetails extract(Principal principal) {
+        if (!(principal instanceof WsAuthentication auth)) {
+            throw new AccessDeniedException("No WS auth");
+        }
+        return (LocalUserDetails) auth.getPrincipal();
     }
 }

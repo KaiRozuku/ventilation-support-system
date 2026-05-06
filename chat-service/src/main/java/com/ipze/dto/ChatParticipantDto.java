@@ -1,11 +1,14 @@
 package com.ipze.dto;
 
+import com.ipze.enums.ParticipantRole;
+
 import java.time.LocalDateTime;
 
 public record ChatParticipantDto(
-     String userId,
-     String role,
-     LocalDateTime joinedAt,
-     LocalDateTime lastReadAt,
-     boolean muted
-) { }
+        String userId,
+        String username,
+        String email,
+        String avatarUrl,
+        ParticipantRole role,
+        LocalDateTime joinedAt
+) {}

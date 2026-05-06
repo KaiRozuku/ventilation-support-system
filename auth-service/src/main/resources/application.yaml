@@ -1,6 +1,9 @@
 server:
   port: 8080
 
+security:
+  secret-key: ${JWT_SECRET_KEY}
+
 spring:
   config:
     import: "optional:file:.env"  # .env читається без [.properties]

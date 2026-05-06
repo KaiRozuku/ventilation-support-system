@@ -16,14 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/auth")
+@RequestMapping
 public class AuthController {
 
     private final AuthService authService;
@@ -52,7 +51,7 @@ public class AuthController {
 
         String refreshToken =
                 jwtService.generateRefreshToken(user.email(), user.userID());
-
+        log.info("access \n{}", accessToken);
         refreshTokenService.writeRefreshToken(user.email(), refreshToken);
         log.info("Write to Redis {} user id {}", refreshToken, user.userID());
         return ResponseEntity.ok()
@@ -82,14 +81,13 @@ public class AuthController {
                 .body(
                         JwtResponse
                                 .builder()
-                                .accessToken(accessToken)
-                                .token(refreshTokenRequestDto.token())
+                                .accessToken("Bearer " + accessToken)
+                                .refreshToken("Bearer " + refreshTokenRequestDto.token())
                                 .build()
                 );
     }
 
     @PutMapping("/logout")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
 
         String token = authHeader.substring(7);

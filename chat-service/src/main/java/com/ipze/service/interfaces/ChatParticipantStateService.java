@@ -10,6 +10,4 @@ public interface ChatParticipantStateService {
     ChatParticipantDto updateRole(String chatId, String userId, ParticipantRole role);
 
     ChatParticipantDto mute(String chatId, String userId, boolean muted);
-
-    ChatParticipantDto updateLastRead(String chatId, String userId, LocalDateTime time);
 }

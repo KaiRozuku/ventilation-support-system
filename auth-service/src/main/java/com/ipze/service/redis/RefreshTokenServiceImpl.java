@@ -52,7 +52,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         var user = userRepository.findUserByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
-        log.info("Written token to Redis {}", token);
+        log.info("Written refreshToken to Redis {}", token);
 
         refreshTokenRepository.save(
                 RefreshToken.builder()
@@ -69,7 +69,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public UserDto getUserFromRefreshToken(String token) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
                 .map(this::verifyExpiration)
-                .orElseThrow(() -> new TokenNotFoundException("Refresh token not found or expired"));
+                .orElseThrow(() -> new TokenNotFoundException("Refresh refreshToken not found or expired"));
         log.info("refreshToken {} from user ?", refreshToken);
         return userMapper.toDto(
                 userRepository.findById(UUID.fromString(refreshToken.getUserId()))
@@ -80,9 +80,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().isBefore(Instant.now())) {
-            log.info("Deleted token {}", token);
+            log.info("Deleted refreshToken {}", token);
             refreshTokenRepository.delete(token);
-            throw new RuntimeException(token.getToken() + " Refresh token is expired. Please make a new login..!");
+            throw new RuntimeException(token.getToken() + " Refresh refreshToken is expired. Please make a new login..!");
         }
         return token;
     }

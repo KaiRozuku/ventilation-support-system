@@ -20,22 +20,22 @@ public class RouteConfiguration {
                                GatewayFilter gatewayFilter) {
 
         return builder.routes()
-                .route(createRoute("auth-service", "/auth-service", gatewayFilter))
-                .route(createRoute("chat-service", "/chat-service", gatewayFilter))
-                .route(createRoute("user-service", "/user-service", gatewayFilter))
-                .route(createRoute("data-service", "/data-service", gatewayFilter))
+                .route(createRoute("auth-service", "/auth", gatewayFilter))
+                .route(createRoute("chat-service", "/chat", gatewayFilter))
+                .route(createRoute("user-service", "/user", gatewayFilter))
+                .route(createRoute("data-service", "/data", gatewayFilter))
+                .route(createRoute("analytic-service", "/analytic", gatewayFilter))
                 .route("chat-ws", r -> r
                         .path("/ws/**")
                         .uri("lb:ws://chat-service"))
                 .build();
     }
 
-    private Function<PredicateSpec,Buildable<Route>>
+    private Function<PredicateSpec, Buildable<Route>>
     createRoute(String serviceName, String pathPrefix, GatewayFilter filter) {
         return r -> r.path(pathPrefix + "/**")
                 .filters(f -> f
-                        .rewritePath(pathPrefix + "/(?<segment>.*)", "/"
-                                + serviceName.replace("-service", "") + "/${segment}")
+                        .rewritePath(pathPrefix + "/(?<segment>.*)", "/${segment}")
                         .filter(filter))
                 .uri("lb://" + serviceName);
     }

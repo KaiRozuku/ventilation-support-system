@@ -1,4 +1,3 @@
-# app/core/mongo.py
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
@@ -11,7 +10,7 @@ class MongoDB:
         self.client: AsyncIOMotorClient | None = None
         self.db = None
 
-    def connect(self):
+    async def connect(self):
         mongo_uri = os.getenv("MONGO_URI")
         db_name = os.getenv("MONGO_DB_NAME")
 
@@ -19,11 +18,17 @@ class MongoDB:
             raise ValueError("MONGO_URI is not set in .env")
 
         self.client = AsyncIOMotorClient(mongo_uri)
+
+        # optional: ping to ensure connection
+        await self.client.admin.command("ping")
+
         self.db = self.client[db_name]
 
-    def close(self):
+    async def close(self):
         if self.client:
             self.client.close()
+            self.client = None
+            self.db = None
 
 
 mongo = MongoDB()

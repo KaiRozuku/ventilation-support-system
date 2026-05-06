@@ -1,5 +1,9 @@
 package com.ipze.dto;
 
 public enum MessageStatus {
-    RECEIVED, DELIVERED
+    SENT,
+    DELIVERED,
+    READ,
+    EDITED,
+    DELETED
 }

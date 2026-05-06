@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ChatMessageService {
 
-    ChatMessageDto sendMessage(SendMessageRequest dto, String userId);
+    ChatMessageDto savedMessage(SendMessageRequest dto, String userId);
 
     List<ChatMessageDto> getMessagesOrderByTimestampAsc(String chatId, String userId);
 

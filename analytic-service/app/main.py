@@ -1,13 +1,11 @@
 from fastapi import FastAPI
-
-from routes import analytic_routes
+from app.routes.analytic_routes import router as test_router
+from core.lifespan import lifespan
 
 app = FastAPI(
     title="Ventilation Analytic System",
-    lifespan=None
+    lifespan=lifespan
 )
+# main.py
 
-# routers
-app.include_router(analytic_routes)
-app.include_router(None)
-app.include_router(None)
+app.include_router(test_router)

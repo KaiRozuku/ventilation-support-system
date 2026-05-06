@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ChatMessageDto implements Serializable {
+
     private String id;
 
     private String chatId;

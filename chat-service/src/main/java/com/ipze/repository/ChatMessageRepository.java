@@ -11,9 +11,16 @@ import java.util.Optional;
 @Repository
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
 
-    Optional<ChatMessage> findTopByChatIdOrderByTimestampDesc(String chatId);
+    Optional<ChatMessage> findTopByChatIdAndStatusNotOrderByTimestampDesc(
+            String chatId,
+            MessageStatus status
+    );
 
-    List<ChatMessage> findByChatIdAndContentContainingIgnoreCase(String chatId, String keyword);
+    List<ChatMessage> findByChatIdAndContentContainingIgnoreCaseAndStatusNot(
+            String chatId,
+            String keyword,
+            MessageStatus status
+    );
 
     List<ChatMessage> findByChatIdAndStatusNotOrderByTimestampAsc(
             String chatId,

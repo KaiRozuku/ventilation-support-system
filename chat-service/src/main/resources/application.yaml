@@ -1,8 +1,10 @@
 server:
   port: 8083
 
-spring:
+security:
+  secret-key: ${JWT_SECRET_KEY}
 
+spring:
   application:
     name: chat-service
 

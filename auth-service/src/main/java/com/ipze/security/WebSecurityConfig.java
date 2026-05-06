@@ -39,11 +39,12 @@ public class WebSecurityConfig{
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "/auth/refreshToken").permitAll()
-                        .requestMatchers("/auth/logout").authenticated()
-                        .requestMatchers("/auth/api/account/**").authenticated()
-                        .requestMatchers("/auth/api/system/**").hasAuthority(Role.SYSTEM.name())
-                        .anyRequest().permitAll())
+                        .requestMatchers("/login", "/register", "/refreshToken").permitAll()
+                        .requestMatchers("/logout").authenticated()
+                        .requestMatchers("/account/**").authenticated()
+                        .requestMatchers("/management/**").hasAnyAuthority(Role.SYSTEM.name(), Role.ADMIN.name())
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

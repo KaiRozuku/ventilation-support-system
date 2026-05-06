@@ -13,6 +13,9 @@ public class UserServiceApplication {
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.load();
         System.setProperty("EUREKA_URL", dotenv.get("EUREKA_URL"));
+        System.setProperty("AMQP", dotenv.get("AMQP"));
+        System.setProperty("RABBIT_QUEUE_REC", dotenv.get("RABBIT_QUEUE_REC"));
+        System.setProperty("JWT_SECRET_KEY", dotenv.get("JWT_SECRET_KEY"));
 
         SpringApplication.run(UserServiceApplication.class, args);
     }

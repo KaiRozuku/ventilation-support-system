@@ -1,13 +1,43 @@
 server:
   port: 8084
 
+fastapi:
+  data-service: http://localhost:8085
+  analytics-service: http://localhost:8081
+
+gateway-service: http://localhost:8082
+
 security:
+  secret-key: ${JWT_SECRET_KEY}
   excluded-urls:
     - /auth/**
-
 spring:
   application:
     name: user-service
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+rabbitmq:
+  exchange:
+    main: app.exchange
+    dlx: app.dlx.exchange
+
+  queue:
+    message: message.queue
+    dlq: message.dlq.queue
+    retry: message.retry.queue
+    delay: message.delay.queue
+
+  routing-key:
+    message: message.created
+    dlq: message.dlq
+    retry: message.retry
+
+
 #
 #  autoconfigure:
 #    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration

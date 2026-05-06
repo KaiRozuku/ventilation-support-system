@@ -1,32 +1,4 @@
-package com.ipze.model.redis;//package com.ipze.model.redis;
-//
-//import jakarta.persistence.Id;
-//import lombok.*;
-//import org.springframework.data.redis.core.RedisHash;
-//import org.springframework.data.redis.core.TimeToLive;
-//
-//import java.io.Serializable;
-//import java.time.Instant;
-//import java.time.LocalDateTime;
-//import java.util.UUID;
-//
-//@RedisHash(value = "Tokens", timeToLive = 86400)
-//@Data
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
-//public class Token {
-//
-//    private String id;
-//
-//    private String username;
-//    private String authenticationToken;
-//    private String modifiedBy;
-//    private LocalDateTime modifiedOn;
-//    private String createdBy;
-//    private LocalDateTime createdOn;
-//
-//}
+package com.ipze.model.redis;
 
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;

@@ -7,17 +7,16 @@ import com.ipze.security.ApplicationUserDetails;
 import com.ipze.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/auth/api/account")
+@RequestMapping("/account")
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("isAuthenticated()")
 public class AuthAccountController {
 
     private final UserAccountService userAccountService;
+
     @PutMapping("/password")
     public ResponseEntity<Void> changePassword(
             @RequestBody ChangePasswordRequest request,

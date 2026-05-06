@@ -8,6 +8,7 @@ import com.ipze.repository.ChatParticipantRepository;
 import com.ipze.service.interfaces.ChatParticipantQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ChatParticipantQueryServiceImpl implements ChatParticipantQueryServ
     private final ChatParticipantMapper chatParticipantMapper;
 
     @Override
+    @PreAuthorize("@chatSecurityService.isParticipant(#chatId, authentication.principal.uuid)")
     public List<ChatParticipantDto> getParticipants(String chatId) {
         return chatParticipantRepository.findByChatId(chatId)
                 .stream()
@@ -30,12 +32,12 @@ public class ChatParticipantQueryServiceImpl implements ChatParticipantQueryServ
     }
 
     @Override
+    @PreAuthorize("@chatSecurityService.isParticipant(#chatId, authentication.principal.uuid)")
     public ChatParticipantDto getParticipant(String chatId, String userId) {
         return chatParticipantMapper.toDto(getParticipantOrThrow(chatId, userId));
     }
 
     private ChatParticipant getParticipantOrThrow(String chatId, String userId) {
-        log.info("chat -> {} user->{}", chatId, userId);
         return chatParticipantRepository
                 .findByChatIdAndUserId(chatId, userId)
                 .orElseThrow(ParticipantNotFoundException::new);

@@ -12,6 +12,6 @@ import java.util.List;
 @Getter
 @ConfigurationProperties(prefix = "security")
 public class SecurityProperties {
-
+    private String secretKey;
     private List<String> excludedUrls;
 }

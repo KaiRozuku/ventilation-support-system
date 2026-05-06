@@ -11,12 +11,6 @@ public record LocalUserDetails(String uuid, String username, Collection<? extend
         return authorities;
     }
 
-    public String getRole(){
-        return authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .reduce((a, b) -> a + "," + b)
-                .orElse("");
-    }
     @Override
     public String getPassword() {
         return null;

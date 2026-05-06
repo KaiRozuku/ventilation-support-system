@@ -7,11 +7,15 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-public class ChatServiceApplication {
+public class
+
+
+ChatServiceApplication {
     public static void main(String[] args) {
 
         Dotenv dotenv = Dotenv.load();
 
+        System.setProperty("JWT_SECRET_KEY", dotenv.get("JWT_SECRET_KEY"));
         System.setProperty("RABBIT_HOST", dotenv.get("RABBIT_HOST"));
         System.setProperty("RABBIT_PORT", dotenv.get("RABBIT_PORT"));
         System.setProperty("RABBIT_STOMP_PORT", dotenv.get("RABBIT_STOMP_PORT"));
